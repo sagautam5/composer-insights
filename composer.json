@@ -1,0 +1,20 @@
+{
+    "name": "sagautam5/composer-insights",
+    "description": "CLI tool to audit and analyze your composer dependencies.",
+    "type": "project",
+    "require": {
+        "php": "^8.1",
+        "symfony/console": "^6.0 || ^7.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ComposerInsights\\": "src/"
+        }
+    },
+    "bin": [
+        "bin/composer-insights"
+    ],
+    "minimum-stability": "stable",
+    "license": "MIT"
+}
