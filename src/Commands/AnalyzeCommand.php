@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+use ComposerInsights\Support\FormatHelper;
 class AnalyzeCommand extends Command
 {
     protected static $defaultName = 'analyze';
@@ -65,7 +65,7 @@ class AnalyzeCommand extends Command
     private function renderAnalysisTable(OutputInterface $output, array $packages, array $explicitRequires, GitHubAnalyzer $analyzer): void
     {
         $table = new Table($output);
-        $table->setHeaders(['Package', 'Stars', 'Forks', 'Open Issues', 'Last Updated', 'Downloads']);
+        $table->setHeaders(['Package', 'Stars', 'Forks', 'Open Issues', 'Downloads', 'Last Updated']);
 
         foreach ($packages as $package) {
             $row = $this->analyzePackage($package, $explicitRequires, $analyzer, $output);
@@ -99,15 +99,15 @@ class AnalyzeCommand extends Command
 
         $downloads = $this->fetchPackagistDownloads(...explode('/', $name));
         $info['downloads'] = $downloads ?? ['total' => 'N/A'];
-        $info['updated_at'] = $this->timeAgo($info['updated_at']);
+        $info['updated_at'] = FormatHelper::timeAgo($info['updated_at']);
 
         return [
             $name,
-            $this->humanNumber($info['stargazers_count']),
-            $this->humanNumber($info['forks_count']),
-            $this->humanNumber($info['open_issues_count']),
+            FormatHelper::humanNumber($info['stargazers_count']),
+            FormatHelper::humanNumber($info['forks_count']),
+            FormatHelper::humanNumber($info['open_issues_count']),
+            FormatHelper::humanNumber($info['downloads']['total']),
             $info['updated_at'],
-            $this->humanNumber($info['downloads']['total']),
         ];
     }
 
@@ -125,48 +125,5 @@ class AnalyzeCommand extends Command
 
         $data = json_decode($json, true);
         return $data['package']['downloads'] ?? null;
-    }
-
-    private function humanNumber(int|string $number): string
-    {
-        if (!is_numeric($number)) return (string) $number;
-
-        $number = (int) $number;
-
-        return match (true) {
-            $number >= 1_000_000_000 => round($number / 1_000_000_000, 1) . 'B',
-            $number >= 1_000_000     => round($number / 1_000_000, 1) . 'M',
-            $number >= 1_000         => round($number / 1_000, 1) . 'k',
-            default                  => (string) $number,
-        };
-    }
-
-    private function timeAgo(string $datetime, bool $full = false): string
-    {
-        $now = new DateTime;
-        $ago = new DateTime($datetime);
-        $diff = $now->diff($ago);
-
-        $diff->w = (int) floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
-
-        $units = [
-            'y' => 'year',
-            'm' => 'month',
-            'w' => 'week',
-            'd' => 'day',
-            'h' => 'hour',
-            'i' => 'minute',
-            's' => 'second',
-        ];
-
-        $parts = [];
-        foreach ($units as $key => $label) {
-            if ($diff->$key) {
-                $parts[] = $diff->$key . ' ' . $label . ($diff->$key > 1 ? 's' : '');
-            }
-        }
-
-        return $parts ? implode(', ', $full ? $parts : [reset($parts)]) . ' ago' : 'just now';
     }
 }

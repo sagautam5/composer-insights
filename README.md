@@ -58,14 +58,16 @@ This will:
 ### Example Output
 
 ```
-🔍 Composer Insights Analysis
+🔍 Fetching Composer Dependency Insights
 
-+----------------------+--------+--------+--------------+----------------+-----------+
-| Package              | Stars  | Forks  | Open Issues  | Last Updated   | Downloads |
-+----------------------+--------+--------+--------------+----------------+-----------+
-| guzzlehttp/guzzle    | 22k    | 2k     | 50           | 1 month ago    | 1.2B      |
-| psr/log              | 12k    | 600    | 10           | 3 months ago   | 400M      |
-+----------------------+--------+--------+--------------+----------------+-----------+
++-------------------+-------+-------+-------------+-----------+----------------+
+| Package           | Stars | Forks | Open Issues | Downloads | Last Updated   |
++-------------------+-------+-------+-------------+-----------+----------------+
+| guzzlehttp/guzzle | 23.4k | 2.4k  | 31          | 842M      | 23 minutes ago |
+| symfony/console   | 9.8k  | 264   | 1           | 929.4M    | 2 days ago     |
+| vlucas/phpdotenv  | 13.4k | 644   | 13          | 501.9M    | 7 hours ago    |
+| pestphp/pest      | 10.3k | 386   | 167         | 32.6M     | 5 hours ago    |
++-------------------+-------+-------+-------------+-----------+----------------+
 
 ✅ Done
 ```
