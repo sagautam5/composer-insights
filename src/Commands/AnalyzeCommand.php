@@ -13,6 +13,11 @@ class AnalyzeCommand extends Command
 {
     protected static $defaultName = 'analyze';
 
+    public static function getDefaultName(): ?string
+    {
+        return self::$defaultName;
+    }
+
     protected function configure(): void
     {
         $this->setDescription('Analyzes the current composer.lock and provides insights.');
