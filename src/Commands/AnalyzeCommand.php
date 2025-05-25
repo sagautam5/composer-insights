@@ -2,12 +2,12 @@
 
 namespace ComposerInsights\Commands;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use ComposerInsights\GitHub\GitHubAnalyzer;
 use DateTime;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class AnalyzeCommand extends Command
 {
@@ -20,89 +20,137 @@ class AnalyzeCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Analyzes the current composer.lock and provides insights.');
+        $this->setDescription('Analyzes the current composer files and provides insights.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>🔍 Composer Insights Analysis</info>');
+        $output->writeln('<info>🔍 Fetching Composer Dependency Insights</info>');
 
-        $basePath = getcwd();
-        $lockPath = $basePath . '/composer.lock';
-        $jsonPath = $basePath . '/composer.json';
-
-        if (!file_exists($lockPath) || !file_exists($jsonPath)) {
+        if (!$this->hasComposerFiles()) {
             $output->writeln('<error>composer.lock or composer.json not found.</error>');
             return Command::FAILURE;
         }
 
-        $lockData = json_decode(file_get_contents($lockPath), true);
-        $jsonData = json_decode(file_get_contents($jsonPath), true);
+        [$explicitRequires, $packages] = $this->loadComposerData();
+        $analyzer = new GitHubAnalyzer($_ENV['GITHUB_TOKEN'] ?? null);
 
-        $explicitRequires = array_merge(
-            array_keys($jsonData['require'] ?? []),
-            array_keys($jsonData['require-dev'] ?? [])
-        );
-
-        $explicitRequires = array_map('strtolower', $explicitRequires); // normalize names
-
-        $packages = array_merge($lockData['packages'] ?? [], $lockData['packages-dev'] ?? []);
-        $analyzer = new GitHubAnalyzer($_ENV['GITHUB_TOKEN']);
-
-        $table = new Table($output);
-        $table->setHeaders(['Package', 'Stars', 'Forks', 'Open Issues', 'Last Updated', 'Downloads']);
-
-        foreach ($packages as $package) {
-            $name = strtolower($package['name']);
-            if (!in_array($name, $explicitRequires)) {
-                continue; // skip transitive dependencies
-            }
-
-            $repo = $package['source']['url'] ?? null;
-            if (!$repo || !str_contains($repo, 'github.com')) {
-                $output->writeln("[SKIP] {$name} (non-GitHub)");
-                continue;
-            }
-
-            $info = $analyzer->fetchRepoData($repo);
-            if (isset($info['error'])) {
-                $output->writeln("[ERROR] {$name}: {$info['error']}");
-                continue;
-            }
-
-            $packageParts = explode('/', $name);
-            $downloads = $this->fetchPackagistDownloads($packageParts[0], $packageParts[1]);
-            $info['downloads'] = $downloads ?? ['total' => 'N/A'];
-
-            $info['updated_at'] = $this->timeAgo($info['updated_at']);
-
-            $table->addRow([
-                $name,
-                $this->humanNumber($info['stargazers_count']),
-                $this->humanNumber($info['forks_count']),
-                $this->humanNumber($info['open_issues_count']),
-                $info['updated_at'],
-                $this->humanNumber($info['downloads']['total']),
-            ]);
-        }
-
-        $table->render();
+        $this->renderAnalysisTable($output, $packages, $explicitRequires, $analyzer);
 
         $output->writeln("\n<info>✅ Done</info>");
         return Command::SUCCESS;
     }
 
+    private function hasComposerFiles(): bool
+    {
+        return file_exists('composer.lock') && file_exists('composer.json');
+    }
 
-    protected function timeAgo($datetime, $full = false)
+    private function loadComposerData(): array
+    {
+        $lock = json_decode(file_get_contents('composer.lock'), true);
+        $json = json_decode(file_get_contents('composer.json'), true);
+
+        $requires = array_merge(
+            array_keys($json['require'] ?? []),
+            array_keys($json['require-dev'] ?? [])
+        );
+
+        $requires = array_map('strtolower', $requires);
+        $packages = array_merge($lock['packages'] ?? [], $lock['packages-dev'] ?? []);
+
+        return [$requires, $packages];
+    }
+
+    private function renderAnalysisTable(OutputInterface $output, array $packages, array $explicitRequires, GitHubAnalyzer $analyzer): void
+    {
+        $table = new Table($output);
+        $table->setHeaders(['Package', 'Stars', 'Forks', 'Open Issues', 'Last Updated', 'Downloads']);
+
+        foreach ($packages as $package) {
+            $row = $this->analyzePackage($package, $explicitRequires, $analyzer, $output);
+            if ($row !== null) {
+                $table->addRow($row);
+            }
+        }
+
+        $table->render();
+    }
+
+    private function analyzePackage(array $package, array $explicitRequires, GitHubAnalyzer $analyzer, OutputInterface $output): ?array
+    {
+        $name = strtolower($package['name']);
+
+        if (!in_array($name, $explicitRequires, true)) {
+            return null;
+        }
+
+        $repoUrl = $package['source']['url'] ?? '';
+        if (!$repoUrl || !str_contains($repoUrl, 'github.com')) {
+            $output->writeln("[SKIP] {$name} (non-GitHub)");
+            return null;
+        }
+
+        $info = $analyzer->fetchRepoData($repoUrl);
+        if (isset($info['error'])) {
+            $output->writeln("[ERROR] {$name}: {$info['error']}");
+            return null;
+        }
+
+        $downloads = $this->fetchPackagistDownloads(...explode('/', $name));
+        $info['downloads'] = $downloads ?? ['total' => 'N/A'];
+        $info['updated_at'] = $this->timeAgo($info['updated_at']);
+
+        return [
+            $name,
+            $this->humanNumber($info['stargazers_count']),
+            $this->humanNumber($info['forks_count']),
+            $this->humanNumber($info['open_issues_count']),
+            $info['updated_at'],
+            $this->humanNumber($info['downloads']['total']),
+        ];
+    }
+
+    private function fetchPackagistDownloads(string $vendor, string $package): ?array
+    {
+        $url = "https://packagist.org/packages/{$vendor}/{$package}.json";
+        $context = stream_context_create([
+            'http' => ['header' => 'User-Agent: ComposerInsights']
+        ]);
+
+        $json = @file_get_contents($url, false, $context);
+        if (!$json) {
+            return null;
+        }
+
+        $data = json_decode($json, true);
+        return $data['package']['downloads'] ?? null;
+    }
+
+    private function humanNumber(int|string $number): string
+    {
+        if (!is_numeric($number)) return (string) $number;
+
+        $number = (int) $number;
+
+        return match (true) {
+            $number >= 1_000_000_000 => round($number / 1_000_000_000, 1) . 'B',
+            $number >= 1_000_000     => round($number / 1_000_000, 1) . 'M',
+            $number >= 1_000         => round($number / 1_000, 1) . 'k',
+            default                  => (string) $number,
+        };
+    }
+
+    private function timeAgo(string $datetime, bool $full = false): string
     {
         $now = new DateTime;
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
 
-        $diff->w = floor($diff->d / 7);  // convert days to weeks
+        $diff->w = (int) floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
 
-        $string = [
+        $units = [
             'y' => 'year',
             'm' => 'month',
             'w' => 'week',
@@ -111,49 +159,14 @@ class AnalyzeCommand extends Command
             'i' => 'minute',
             's' => 'second',
         ];
-        foreach ($string as $k => &$v) {
-            if ($diff->$k) {
-                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-            } else {
-                unset($string[$k]);
+
+        $parts = [];
+        foreach ($units as $key => $label) {
+            if ($diff->$key) {
+                $parts[] = $diff->$key . ' ' . $label . ($diff->$key > 1 ? 's' : '');
             }
         }
 
-        if (!$full) $string = array_slice($string, 0, 1);
-        return $string ? implode(', ', $string) . ' ago' : 'just now';
+        return $parts ? implode(', ', $full ? $parts : [reset($parts)]) . ' ago' : 'just now';
     }
-
-    protected function fetchPackagistDownloads(string $vendor, string $package): ?array
-    {
-        $url = "https://packagist.org/packages/{$vendor}/{$package}.json";
-
-        $context = stream_context_create([
-            'http' => ['header' => 'User-Agent: PHP']
-        ]);
-
-        $json = @file_get_contents($url, false, $context);
-        if (!$json) return null;
-
-        $data = json_decode($json, true);
-
-        return $data['package']['downloads'] ?? null;
-    }
-
-    protected function humanNumber(int $number): string
-    {
-        if ($number >= 1_000_000_000) {
-            return round($number / 1_000_000_000, 1) . 'B';
-        }
-
-        if ($number >= 1_000_000) {
-            return round($number / 1_000_000, 1) . 'M';
-        }
-
-        if ($number >= 1_000) {
-            return round($number / 1_000, 1) . 'k';
-        }
-
-        return (string) $number;
-    }
-
 }
