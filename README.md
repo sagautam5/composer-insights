@@ -20,6 +20,25 @@
 
 ---
 
+## 💡Example Output
+
+```
+🔍 Fetching Composer Dependency Insights
+
++-------------------+-------+-------+-------------+-----------+----------------+
+| Package           | Stars | Forks | Open Issues | Downloads | Last Updated   |
++-------------------+-------+-------+-------------+-----------+----------------+
+| guzzlehttp/guzzle | 23.4k | 2.4k  | 31          | 842M      | 23 minutes ago |
+| symfony/console   | 9.8k  | 264   | 1           | 929.4M    | 2 days ago     |
+| vlucas/phpdotenv  | 13.4k | 644   | 13          | 501.9M    | 7 hours ago    |
+| pestphp/pest      | 10.3k | 386   | 167         | 32.6M     | 5 hours ago    |
++-------------------+-------+-------+-------------+-----------+----------------+
+
+✅ Done
+```
+
+---
+
 ## 📥 Installation
 
 You can install it in any Composer-based local PHP project:
@@ -54,23 +73,6 @@ This will:
 - Check each direct dependency (ignores transitive)
 - Fetch GitHub and Packagist stats
 - Display a beautiful CLI table
-
-### Example Output
-
-```
-🔍 Fetching Composer Dependency Insights
-
-+-------------------+-------+-------+-------------+-----------+----------------+
-| Package           | Stars | Forks | Open Issues | Downloads | Last Updated   |
-+-------------------+-------+-------+-------------+-----------+----------------+
-| guzzlehttp/guzzle | 23.4k | 2.4k  | 31          | 842M      | 23 minutes ago |
-| symfony/console   | 9.8k  | 264   | 1           | 929.4M    | 2 days ago     |
-| vlucas/phpdotenv  | 13.4k | 644   | 13          | 501.9M    | 7 hours ago    |
-| pestphp/pest      | 10.3k | 386   | 167         | 32.6M     | 5 hours ago    |
-+-------------------+-------+-------+-------------+-----------+----------------+
-
-✅ Done
-```
 
 ---
 
