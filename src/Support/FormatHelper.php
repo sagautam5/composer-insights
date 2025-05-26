@@ -46,8 +46,9 @@ class FormatHelper
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
 
-        $diff->w = (int) floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
+        // Compute weeks separately (not assigning to $diff->w)
+        $weeks = (int) floor($diff->d / 7);
+        $daysRemaining = $diff->d - $weeks * 7;
 
         $units = [
             'y' => 'year',
@@ -59,9 +60,19 @@ class FormatHelper
             's' => 'second',
         ];
 
+        // Build parts array using individual values
         $parts = [];
         foreach ($units as $key => $label) {
-            $value = $diff->$key ?? 0;
+            $value = match ($key) {
+                'y' => $diff->y,
+                'm' => $diff->m,
+                'w' => $weeks,
+                'd' => $daysRemaining,
+                'h' => $diff->h,
+                'i' => $diff->i,
+                's' => $diff->s,
+            };
+
             if ($value) {
                 $parts[] = $value . ' ' . $label . ($value > 1 ? 's' : '');
             }
