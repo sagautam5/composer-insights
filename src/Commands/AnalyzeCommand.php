@@ -3,7 +3,6 @@
 namespace ComposerInsights\Commands;
 
 use ComposerInsights\GitHub\GitHubAnalyzer;
-use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,7 +64,7 @@ class AnalyzeCommand extends Command
     private function renderAnalysisTable(OutputInterface $output, array $packages, array $explicitRequires, GitHubAnalyzer $analyzer): void
     {
         $table = new Table($output);
-        $table->setHeaders(['Package', 'Stars', 'Forks', 'Open Issues', 'Downloads', 'Last Updated']);
+        $table->setHeaders($this->getTableHeaders());
 
         foreach ($packages as $package) {
             $row = $this->analyzePackage($package, $explicitRequires, $analyzer, $output);
@@ -75,6 +74,20 @@ class AnalyzeCommand extends Command
         }
 
         $table->render();
+    }
+
+    private function getTableHeaders(): array
+    {
+        return [
+            'Package',
+            'Latest Version',
+            'Current Version',
+            'Stars',
+            'Forks',
+            'Downloads',
+            'Open Issues',
+            'Last Updated'
+        ];
     }
 
     private function analyzePackage(array $package, array $explicitRequires, GitHubAnalyzer $analyzer, OutputInterface $output): ?array
@@ -98,15 +111,21 @@ class AnalyzeCommand extends Command
         }
 
         $downloads = $this->fetchPackagistDownloads(...explode('/', $name));
+
+        $latestVersion = $this->fetchPackagistLatestVersion(...explode('/', $name));
+
+
         $info['downloads'] = $downloads ?? ['total' => 'N/A'];
         $info['updated_at'] = FormatHelper::timeAgo($info['updated_at']);
 
         return [
             $name,
+            $latestVersion ?? 'N/A',
+            $package['version'] ?? 'N/A',
             FormatHelper::humanNumber($info['stargazers_count']),
             FormatHelper::humanNumber($info['forks_count']),
-            FormatHelper::humanNumber($info['open_issues_count']),
             FormatHelper::humanNumber($info['downloads']['total']),
+            FormatHelper::humanNumber($info['open_issues_count']),
             $info['updated_at'],
         ];
     }
@@ -126,4 +145,36 @@ class AnalyzeCommand extends Command
         $data = json_decode($json, true);
         return $data['package']['downloads'] ?? null;
     }
+
+    private function fetchPackagistLatestVersion(string $vendor, string $package): ?string
+    {
+        $url = "https://repo.packagist.org/p2/{$vendor}/{$package}.json";
+        $context = stream_context_create([
+            'http' => ['header' => 'User-Agent: ComposerInsights']
+        ]);
+
+        $json = @file_get_contents($url, false, $context);
+        if (!$json) {
+            return null;
+        }
+
+        $data = json_decode($json, true);
+        $versions = $data['packages']["{$vendor}/{$package}"] ?? [];
+
+        foreach ($versions as $versionData) {
+            if (!isset($versionData['version_normalized'])) {
+                continue;
+            }
+
+            // Ignore dev versions
+            if (str_starts_with($versionData['version_normalized'], '9999999-dev')) {
+                continue;
+            }
+
+            return $versionData['version'] ?? null;
+        }
+
+        return null;
+    }
+
 }
