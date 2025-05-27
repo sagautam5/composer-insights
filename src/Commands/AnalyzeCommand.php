@@ -80,6 +80,7 @@ class AnalyzeCommand extends Command
     {
         return [
             'Package',
+            'License',
             'Latest Version',
             'Current Version',
             'Stars',
@@ -110,16 +111,30 @@ class AnalyzeCommand extends Command
             return null;
         }
 
-        $downloads = $this->fetchPackagistDownloads(...explode('/', $name));
+        $metadata = $this->fetchPackagistMetaData(...explode('/', $name));
+        
+        $license = $metadata['license'] ?? null;
 
+        if (!$license && isset($metadata['versions'])) {
+            foreach ($metadata['versions'] as $ver) {
+                if (!empty($ver['license'])) {
+                    $license = $ver['license'];
+                    break;
+                }
+            }
+        }
+        // return null;
         $latestVersion = $this->fetchPackagistLatestVersion(...explode('/', $name));
 
+        $info['downloads'] = $metadata['downloads'] ?? ['total' => 'N/A'];
+        
+        $license = is_array($license) ? implode(', ', $license) : ($license ?? 'N/A');
 
-        $info['downloads'] = $downloads ?? ['total' => 'N/A'];
         $info['updated_at'] = FormatHelper::timeAgo($info['updated_at']);
 
         return [
             $name,
+            $license,
             $latestVersion ?? 'N/A',
             $package['version'] ?? 'N/A',
             FormatHelper::humanNumber($info['stargazers_count']),
@@ -130,7 +145,7 @@ class AnalyzeCommand extends Command
         ];
     }
 
-    private function fetchPackagistDownloads(string $vendor, string $package): ?array
+    private function fetchPackagistMetaData(string $vendor, string $package): ?array
     {
         $url = "https://packagist.org/packages/{$vendor}/{$package}.json";
         $context = stream_context_create([
@@ -143,7 +158,7 @@ class AnalyzeCommand extends Command
         }
 
         $data = json_decode($json, true);
-        return $data['package']['downloads'] ?? null;
+        return $data['package'] ?? null;
     }
 
     private function fetchPackagistLatestVersion(string $vendor, string $package): ?string
