@@ -1,6 +1,6 @@
 <?php
 
-namespace ComposerInsights\GitHub;
+namespace ComposerInsights\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;

@@ -2,7 +2,7 @@
 
 namespace ComposerInsights\Commands;
 
-use ComposerInsights\GitHub\GitHubAnalyzer;
+use ComposerInsights\Services\GitHubAnalyzer;
 use ComposerInsights\Services\ComposerDependencyLoader;
 use ComposerInsights\Services\PackagistInsightResolver;
 use Symfony\Component\Console\Command\Command;
