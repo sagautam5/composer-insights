@@ -3,11 +3,15 @@
 namespace ComposerInsights\Commands;
 
 use ComposerInsights\GitHub\GitHubAnalyzer;
+use ComposerInsights\Services\ComposerDependencyLoader;
+use ComposerInsights\Services\PackagistInsightResolver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ComposerInsights\Support\FormatHelper;
+use Symfony\Component\Console\Input\InputOption;
+
 class AnalyzeCommand extends Command
 {
     protected static $defaultName = 'analyze';
@@ -19,7 +23,9 @@ class AnalyzeCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Analyzes the current composer files and provides insights.');
+        $this->setDescription('Analyzes the current composer files and provides insights.')
+            ->addOption('dev', null, InputOption::VALUE_NONE, 'Include dev dependencies')
+            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Exclude dev dependencies');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -31,7 +37,10 @@ class AnalyzeCommand extends Command
             return Command::FAILURE;
         }
 
-        [$explicitRequires, $packages] = $this->loadComposerData();
+        $includeDev = $input->getOption('dev');
+        $excludeDev = $input->getOption('no-dev');
+
+        [$explicitRequires, $packages] = (new ComposerDependencyLoader)->loadComposerData($includeDev, $excludeDev);
         $analyzer = new GitHubAnalyzer($_ENV['GITHUB_TOKEN'] ?? null);
 
         $this->renderAnalysisTable($output, $packages, $explicitRequires, $analyzer);
@@ -43,22 +52,6 @@ class AnalyzeCommand extends Command
     private function hasComposerFiles(): bool
     {
         return file_exists('composer.lock') && file_exists('composer.json');
-    }
-
-    private function loadComposerData(): array
-    {
-        $lock = json_decode(file_get_contents('composer.lock'), true);
-        $json = json_decode(file_get_contents('composer.json'), true);
-
-        $requires = array_merge(
-            array_keys($json['require'] ?? []),
-            array_keys($json['require-dev'] ?? [])
-        );
-
-        $requires = array_map('strtolower', $requires);
-        $packages = array_merge($lock['packages'] ?? [], $lock['packages-dev'] ?? []);
-
-        return [$requires, $packages];
     }
 
     private function renderAnalysisTable(OutputInterface $output, array $packages, array $explicitRequires, GitHubAnalyzer $analyzer): void
@@ -111,7 +104,8 @@ class AnalyzeCommand extends Command
             return null;
         }
 
-        $metadata = $this->fetchPackagistMetaData(...explode('/', $name));
+        $packagistResolver = new PackagistInsightResolver();
+        $metadata = $packagistResolver->fetchMetaData(...explode('/', $name));
         
         $license = $metadata['license'] ?? null;
 
@@ -123,8 +117,8 @@ class AnalyzeCommand extends Command
                 }
             }
         }
-        // return null;
-        $latestVersion = $this->fetchPackagistLatestVersion(...explode('/', $name));
+        
+        $latestVersion = $packagistResolver->fetchLatestVersion(...explode('/', $name));
 
         $info['downloads'] = $metadata['downloads'] ?? ['total' => 'N/A'];
         
@@ -144,52 +138,4 @@ class AnalyzeCommand extends Command
             $info['updated_at'],
         ];
     }
-
-    private function fetchPackagistMetaData(string $vendor, string $package): ?array
-    {
-        $url = "https://packagist.org/packages/{$vendor}/{$package}.json";
-        $context = stream_context_create([
-            'http' => ['header' => 'User-Agent: ComposerInsights']
-        ]);
-
-        $json = @file_get_contents($url, false, $context);
-        if (!$json) {
-            return null;
-        }
-
-        $data = json_decode($json, true);
-        return $data['package'] ?? null;
-    }
-
-    private function fetchPackagistLatestVersion(string $vendor, string $package): ?string
-    {
-        $url = "https://repo.packagist.org/p2/{$vendor}/{$package}.json";
-        $context = stream_context_create([
-            'http' => ['header' => 'User-Agent: ComposerInsights']
-        ]);
-
-        $json = @file_get_contents($url, false, $context);
-        if (!$json) {
-            return null;
-        }
-
-        $data = json_decode($json, true);
-        $versions = $data['packages']["{$vendor}/{$package}"] ?? [];
-
-        foreach ($versions as $versionData) {
-            if (!isset($versionData['version_normalized'])) {
-                continue;
-            }
-
-            // Ignore dev versions
-            if (str_starts_with($versionData['version_normalized'], '9999999-dev')) {
-                continue;
-            }
-
-            return $versionData['version'] ?? null;
-        }
-
-        return null;
-    }
-
 }
