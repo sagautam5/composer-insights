@@ -5,11 +5,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use ComposerInsights\Commands\AnalyzeCommand;
 use Symfony\Component\Console\Application;
-use Dotenv\Dotenv;
-
-$rootPath = dirname(__DIR__, 1); // adjusts for src/Commands
-$dotenv = Dotenv::createImmutable($rootPath);
-$dotenv->load();
 
 $application = new Application('Composer Insights', '0.1.0');
 

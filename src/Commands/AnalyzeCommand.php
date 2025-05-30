@@ -5,8 +5,8 @@ namespace ComposerInsights\Commands;
 use ComposerInsights\Services\GitHubAnalyzer;
 use ComposerInsights\Services\ComposerDependencyLoader;
 use ComposerInsights\Services\PackagistInsightResolver;
+use ComposerInsights\Services\TableRenderer;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use ComposerInsights\Support\FormatHelper;
@@ -32,7 +32,9 @@ class AnalyzeCommand extends Command
     {
         $output->writeln('<info>🔍 Fetching Composer Dependency Insights</info>');
 
-        if (!$this->hasComposerFiles()) {
+        $dependencyLoader = new ComposerDependencyLoader();
+
+        if (!$dependencyLoader->hasComposerFiles()) {
             $output->writeln('<error>composer.lock or composer.json not found.</error>');
             return Command::FAILURE;
         }
@@ -40,52 +42,32 @@ class AnalyzeCommand extends Command
         $includeDev = $input->getOption('dev');
         $excludeDev = $input->getOption('no-dev');
 
-        [$explicitRequires, $packages] = (new ComposerDependencyLoader)->loadComposerData($includeDev, $excludeDev);
-        $analyzer = new GitHubAnalyzer($_ENV['GITHUB_TOKEN'] ?? null);
+        [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($includeDev, $excludeDev);
 
-        $this->renderAnalysisTable($output, $packages, $explicitRequires, $analyzer);
+        $this->renderAnalysisTable($output, $packages, $explicitRequires);
 
         $output->writeln("\n<info>✅ Done</info>");
         return Command::SUCCESS;
     }
 
-    private function hasComposerFiles(): bool
+    private function renderAnalysisTable(OutputInterface $output, array $packages, array $explicitRequires): void
     {
-        return file_exists('composer.lock') && file_exists('composer.json');
-    }
-
-    private function renderAnalysisTable(OutputInterface $output, array $packages, array $explicitRequires, GitHubAnalyzer $analyzer): void
-    {
-        $table = new Table($output);
-        $table->setHeaders($this->getTableHeaders());
-
+        $rows = [];
         foreach ($packages as $package) {
-            $row = $this->analyzePackage($package, $explicitRequires, $analyzer, $output);
+            $row = $this->analyzePackage($package, $explicitRequires, $output);
             if ($row !== null) {
-                $table->addRow($row);
+                $rows[] = $row;
             }
         }
 
-        $table->render();
+        $renderer = new TableRenderer();
+        $renderer->render($rows, $output);
     }
 
-    private function getTableHeaders(): array
+    private function analyzePackage(array $package, array $explicitRequires, OutputInterface $output): ?array
     {
-        return [
-            'Package',
-            'License',
-            'Latest Version',
-            'Current Version',
-            'Stars',
-            'Forks',
-            'Downloads',
-            'Open Issues',
-            'Last Updated'
-        ];
-    }
-
-    private function analyzePackage(array $package, array $explicitRequires, GitHubAnalyzer $analyzer, OutputInterface $output): ?array
-    {
+        $analyzer = new GitHubAnalyzer(getenv('GITHUB_TOKEN') ?? null);
+        
         $name = strtolower($package['name']);
 
         if (!in_array($name, $explicitRequires, true)) {

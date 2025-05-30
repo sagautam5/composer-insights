@@ -41,7 +41,7 @@
 
 ## 📥 Installation
 
-You can install it in any Composer-based local PHP project:
+You can install it in any Composer-based local PHP project as dev dependency:
 
 ```bash
 composer require composer-insights/composer-insights --dev
@@ -67,6 +67,18 @@ Run the following command to start the analysis:
 vendor/bin/composer-insights analyze
 ```
 
+### 🔧 Command Options
+
+#### Development Dependencies
+
+You can control whether to include or exclude development dependencies using these options:
+
+- `--dev`: Include development dependencies in the analysis
+- `--no-dev`: Exclude development dependencies from the analysis
+
+By default, all dependencies will be considered
+
+
 This will:
 
 - Parse your composer file
@@ -87,8 +99,7 @@ This will:
 ## 🧑‍💻 Author
 
 **Sagar Gautam**  
-📧 [sagautam5@gmail.com](mailto:sagautam5@gmail.com)  
-🏠 Pokhara, Nepal  
+📧 [sagautam5@gmail.com](mailto:sagautam5@gmail.com)    
 🔗 [github.com/sagautam5](https://github.com/sagautam5)
 
 ---
@@ -98,6 +109,8 @@ This will:
 Thank you to the following contributor(s):
 
 - **Sagar Gautam** – Creator & Maintainer
+
+
 
 Want to contribute? Feel free to submit a PR or open an issue!
 
@@ -119,3 +132,4 @@ If you find a bug or want to suggest an improvement:
 ---
 
 Enjoy analyzing your dependencies! 🎉
+
