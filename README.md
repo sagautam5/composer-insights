@@ -106,9 +106,8 @@ This will:
 
 ## 🙌 Contributors
 
-Thank you to the following contributor(s):
-
 - **Sagar Gautam** – Creator & Maintainer
+- **ALL Contributors** 
 
 
 
@@ -121,6 +120,18 @@ Want to contribute? Feel free to submit a PR or open an issue!
 This package is open-sourced under the [MIT License](LICENSE).
 
 ---
+
+## Contributing
+Want to contribute to Composer Insights? Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+We welcome all contributions, whether it's:
+
+- Reporting a bug
+- Discussing the current state of the code
+- Submitting a fix
+- Proposing new features
+- Becoming a maintainer
+
 
 ## 💬 Feedback & Issues
 
