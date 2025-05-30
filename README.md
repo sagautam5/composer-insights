@@ -102,6 +102,9 @@ This package is open-sourced under the [MIT License](LICENSE).
 
 ---
 
+## 🔐 Security
+If you discover a security vulnerability within this package, please send an e-mail to sagautam5@gmail.com, All security vulnerabilities will be promptly addressed.
+
 ## 🤝 Contributing
 
 Want to contribute to Composer Insights ? Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
