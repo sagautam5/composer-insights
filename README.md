@@ -69,7 +69,7 @@ vendor/bin/composer-insights analyze
 
 ### 🔧 Command Options
 
-#### Development Dependencies
+ **Development Dependencies**
 
 You can control whether to include or exclude development dependencies using these options:
 
@@ -96,33 +96,15 @@ This will:
 
 ---
 
-## 🧑‍💻 Author
-
-**Sagar Gautam**  
-📧 [sagautam5@gmail.com](mailto:sagautam5@gmail.com)    
-🔗 [github.com/sagautam5](https://github.com/sagautam5)
-
----
-
-## 🙌 Contributors
-
-- **Sagar Gautam** – Creator & Maintainer
-- **ALL Contributors** 
-
-
-
-Want to contribute? Feel free to submit a PR or open an issue!
-
----
-
 ## 🪪 License
 
 This package is open-sourced under the [MIT License](LICENSE).
 
 ---
 
-## Contributing
-Want to contribute to Composer Insights? Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+## 🤝 Contributing
+
+Want to contribute to Composer Insights ? Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 We welcome all contributions, whether it's:
 
@@ -133,13 +115,11 @@ We welcome all contributions, whether it's:
 - Becoming a maintainer
 
 
-## 💬 Feedback & Issues
+ ---
+ ### 🙌 Contributors
 
-If you find a bug or want to suggest an improvement:
-
-- Open an issue on GitHub
-- Email me at [sagautam5@gmail.com](mailto:sagautam5@gmail.com)
-
+- **Sagar Gautam** – Creator & Maintainer
+- **ALL Contributors**
 ---
 
 Enjoy analyzing your dependencies! 🎉
