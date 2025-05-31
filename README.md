@@ -3,10 +3,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/sagautam5/composer-insights?style=social)](https://github.com/sagautam5/composer-insights/stargazers)
 [![Latest Stable Version](https://poser.pugx.org/sagautam5/composer-insights/v)](//packagist.org/packages/sagautam5/composer-insights)
 [![Total Downloads](https://poser.pugx.org/sagautam5/composer-insights/downloads)](//packagist.org/packages/sagautam5/composer-insights)
-[![Issues](https://img.shields.io/github/issues/sagautam5/composer-insights)]
+![Issues](https://img.shields.io/github/issues/sagautam5/composer-insights)
 [![Forks](https://img.shields.io/github/forks/sagautam5/composer-insights
 )](https://github.com/sagautam5/composer-insights/network/members) 
-
 [![GitHub Actions Status](https://github.com/sagautam5/composer-insights/actions/workflows/ci.yml/badge.svg)](https://github.com/sagautam5/composer-insights/actions/workflows/ci.yml)
 
 **Composer Insights** is a CLI tool that analyzes your PHP project's composer dependencies and provides insightful GitHub and Packagist statistics for each top-level dependency.
