@@ -1,43 +1,66 @@
-<?php 
+<?php
 
 namespace ComposerInsights\Services;
 
 class PackagistInsightResolver
 {
+    protected const USER_AGENT = 'ComposerInsights';
+
     public function fetchMetaData(string $vendor, string $package): ?array
     {
-        $url = "https://packagist.org/packages/{$vendor}/{$package}.json";
-        $json = @file_get_contents($url, false, stream_context_create([
-            'http' => ['header' => 'User-Agent: ComposerInsights']
-        ]));
+        $url = $this->buildMetadataUrl($vendor, $package);
+        $data = $this->getJsonFromUrl($url);
 
-        if (!$json) {
-            return null;
-        }
-
-        $data = json_decode($json, true);
         return $data['package'] ?? null;
     }
 
     public function fetchLatestVersion(string $vendor, string $package): ?string
     {
-        $url = "https://repo.packagist.org/p2/{$vendor}/{$package}.json";
-        $json = @file_get_contents($url, false, stream_context_create([
-            'http' => ['header' => 'User-Agent: ComposerInsights']
-        ]));
+        $url = $this->buildVersionUrl($vendor, $package);
+        $data = $this->getJsonFromUrl($url);
+
+        $versions = $data['packages']["{$vendor}/{$package}"] ?? [];
+
+        foreach ($versions as $versionData) {
+            if ($this->isStableVersion($versionData)) {
+                return $versionData['version'] ?? null;
+            }
+        }
+
+        return null;
+    }
+
+    protected function buildMetadataUrl(string $vendor, string $package): string
+    {
+        return "https://packagist.org/packages/{$vendor}/{$package}.json";
+    }
+
+    protected function buildVersionUrl(string $vendor, string $package): string
+    {
+        return "https://repo.packagist.org/p2/{$vendor}/{$package}.json";
+    }
+
+    protected function getJsonFromUrl(string $url): ?array
+    {
+        $context = stream_context_create([
+            'http' => ['header' => 'User-Agent: ' . self::USER_AGENT]
+        ]);
+
+        $json = @file_get_contents($url, false, $context);
 
         if (!$json) {
             return null;
         }
 
-        $data = json_decode($json, true);
-        foreach ($data['packages']["{$vendor}/{$package}"] ?? [] as $versionData) {
-            if (!isset($versionData['version_normalized']) || str_starts_with($versionData['version_normalized'], '9999999-dev')) {
-                continue;
-            }
-            return $versionData['version'] ?? null;
+        return json_decode($json, true);
+    }
+
+    protected function isStableVersion(array $versionData): bool
+    {
+        if (!isset($versionData['version_normalized'])) {
+            return false;
         }
 
-        return null;
+        return !str_starts_with($versionData['version_normalized'], '9999999-dev');
     }
 }

@@ -57,6 +57,17 @@ export GITHUB_TOKEN=your_github_token
 
 You can generate a personal access token from [https://github.com/settings/tokens](https://github.com/settings/tokens)
 
+## 📸 Screenshots
+
+**Classic Token Option**
+
+![Classic Token Option](./images/ClassicTokenOption.png)
+
+**Privillages For Token**
+
+![Privillages For Token](./images/GenerateClassicToken.png)
+
+
 ---
 
 ## 🧪 Usage
