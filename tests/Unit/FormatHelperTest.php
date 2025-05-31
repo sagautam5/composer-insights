@@ -15,31 +15,31 @@ test('it formats hundreds', function () {
 });
 
 test('it formats thousands', function () {
-    expect(FormatHelper::humanNumber(1500))->toBe('1.5k');
+    expect(FormatHelper::humanNumber(1500))->toBe('1.5 k');
 });
 
 test('it formats tens of thousands', function () {
-    expect(FormatHelper::humanNumber(15000))->toBe('15k');
+    expect(FormatHelper::humanNumber(15000))->toBe('15 k');
 });
 
 test('it formats hundreds of thousands', function () {
-    expect(FormatHelper::humanNumber(150000))->toBe('150k');
+    expect(FormatHelper::humanNumber(150000))->toBe('150 k');
 });
 
 test('it formats millions', function () {
-    expect(FormatHelper::humanNumber(1500000))->toBe('1.5M');
+    expect(FormatHelper::humanNumber(1500000))->toBe('1.5 M');
 });
 
 test('it formats tens of millions', function () {
-    expect(FormatHelper::humanNumber(15000000))->toBe('15M');
+    expect(FormatHelper::humanNumber(15000000))->toBe('15 M');
 });
 
 test('it formats hundreds of millions', function () {
-    expect(FormatHelper::humanNumber(150000000))->toBe('150M');
+    expect(FormatHelper::humanNumber(150000000))->toBe('150 M');
 });
 
 test('it formats billions', function () {
-    expect(FormatHelper::humanNumber(1500000000))->toBe('1.5B');
+    expect(FormatHelper::humanNumber(1500000000))->toBe('1.5 B');
 });
 
 test('it handles non-numeric strings', function () {
@@ -47,5 +47,5 @@ test('it handles non-numeric strings', function () {
 });
 
 test('it handles numeric strings', function () {
-    expect(FormatHelper::humanNumber('1200'))->toBe('1.2k');
+    expect(FormatHelper::humanNumber('1200'))->toBe('1.2 k');
 });
