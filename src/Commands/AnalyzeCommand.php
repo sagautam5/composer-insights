@@ -2,6 +2,7 @@
 
 namespace ComposerInsights\Commands;
 
+use Carbon\Carbon;
 use ComposerInsights\Services\GitHubAnalyzer;
 use ComposerInsights\Services\ComposerDependencyLoader;
 use ComposerInsights\Services\PackagistInsightResolver;
@@ -55,11 +56,12 @@ class AnalyzeCommand extends Command
         $rows = [];
         foreach ($packages as $package) {
             $row = $this->analyzePackage($package, $explicitRequires, $output);
+            
             if ($row !== null) {
                 $rows[] = $row;
             }
         }
-
+        
         $renderer = new TableRenderer();
         $renderer->render($rows, $output);
     }
@@ -86,6 +88,8 @@ class AnalyzeCommand extends Command
             return null;
         }
 
+        $info['release_data'] = $analyzer->getReleaseData($repoUrl);
+        
         $packagistResolver = new PackagistInsightResolver();
         $metadata = $packagistResolver->fetchMetaData(...explode('/', $name));
         
@@ -106,18 +110,16 @@ class AnalyzeCommand extends Command
         
         $license = is_array($license) ? implode(', ', $license) : ($license ?? 'N/A');
 
-        $info['updated_at'] = FormatHelper::timeAgo($info['updated_at']);
-
+        $info['updated_at'] = Carbon::parse($info['updated_at'])->diffForHumans();
+        
         return [
             $name,
             $license,
-            $latestVersion ?? 'N/A',
-            $package['version'] ?? 'N/A',
-            FormatHelper::humanNumber($info['stargazers_count']),
-            FormatHelper::humanNumber($info['forks_count']),
+            ($latestVersion ?? 'N/A') . " | " . ($package['version'] ?? 'N/A'),
+            FormatHelper::humanNumber($info['stargazers_count']). " | " . FormatHelper::humanNumber($info['forks_count']). " | " . FormatHelper::humanNumber($info['open_issues_count']),
             FormatHelper::humanNumber($info['downloads']['total']),
-            FormatHelper::humanNumber($info['open_issues_count']),
             $info['updated_at'],
+            ($info['release_data']['last_release_date'] ?? 'N/A') . " | " . ($info['release_data']['time_since_last_release'] ?? 'N/A'),
         ];
     }
 }

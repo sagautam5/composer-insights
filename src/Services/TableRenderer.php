@@ -25,13 +25,11 @@ class TableRenderer
         return [
             'Package',
             'License',
-            'Latest Version',
-            'Current Version',
-            'Stars',
-            'Forks',
+            'Version (Latest|Used)',
+            'Stars|Forks|Open Issues',
             'Downloads',
-            'Open Issues',
-            'Last Updated'
+            'Last Updated',
+            'Last Release | Time Since',
         ];
     }
 }
