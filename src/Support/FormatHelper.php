@@ -24,9 +24,9 @@ class FormatHelper
         $number = (int) $number;
 
         return match (true) {
-            $number >= 1_000_000_000 => round($number / 1_000_000_000, 1) . 'B',
-            $number >= 1_000_000     => round($number / 1_000_000, 1) . 'M',
-            $number >= 1_000         => round($number / 1_000, 1) . 'k',
+            $number >= 1_000_000_000 => round($number / 1_000_000_000, 1) . ' B',
+            $number >= 1_000_000     => round($number / 1_000_000, 1) . ' M',
+            $number >= 1_000         => round($number / 1_000, 1) . ' k',
             default                  => (string) $number,
         };
     }

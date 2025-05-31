@@ -26,10 +26,10 @@ class TableRenderer
             'Package',
             'License',
             'Version (Latest|Used)',
-            'Stars|Forks|Open Issues',
+            'Stars | Forks | Open Issues',
             'Downloads',
             'Last Updated',
-            'Last Release | Time Since',
+            'Last Release (Date | Time)',
         ];
     }
 }
