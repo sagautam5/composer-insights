@@ -3,7 +3,6 @@
 namespace ComposerInsights\Services;
 
 use Carbon\Carbon;
-use ComposerInsights\Support\FormatHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -37,6 +36,7 @@ class GitHubAnalyzer
 
         try {
             $response = $this->client->get("repos/{$ownerAndRepo}");
+   
             return json_decode((string) $response->getBody(), true);
         } catch (GuzzleException $e) {
             return ['error' => $e->getMessage()];
@@ -53,13 +53,13 @@ class GitHubAnalyzer
 
     
         $releaseUrl = $this->getReleaseUrl($ownerAndRepo);
+
         $releases = json_decode($this->client->get($releaseUrl)->getBody(), true);
     
         if (empty($releases[0]['published_at'])) {
             return ['error' => 'No releases found'];
         }
     
-        // Step 4: Calculate days since last release
         $lastReleaseDate = Carbon::parse($releases[0]['published_at']);
     
         return [
@@ -71,6 +71,7 @@ class GitHubAnalyzer
     protected function extractOwnerRepo(string $url): ?string
     {
         preg_match('#github\.com/([^/]+/[^/.]+)(\.git)?#', $url, $matches);
+        
         return $matches[1] ?? null;
     }
 

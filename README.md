@@ -138,7 +138,7 @@ We welcome all contributions, whether it's:
  ---
  ### 🙌 Contributors
 
-- **Sagar Gautam** – Creator & Maintainer
+- [Sagar Gautam](https://github.com/sagautam5) – Creator & Maintainer
 - **ALL Contributors**
 ---
 
