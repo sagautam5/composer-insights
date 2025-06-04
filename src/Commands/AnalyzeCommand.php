@@ -105,23 +105,31 @@ class AnalyzeCommand extends Command
         }
         
         $latestVersion = $packagistResolver->fetchLatestVersion(...explode('/', $name));
+        $currentVersion = $package['version'] ?? 'N/A';
 
         $info['downloads'] = $metadata['downloads'] ?? ['total' => 'N/A'];
         
         $license = is_array($license) ? implode(', ', $license) : ($license ?? 'N/A');
 
-        $info['updated_at'] = Carbon::parse($info['updated_at'])->diffForHumans();
+        $info['updated_at'] = Carbon::parse($info['updated_at']);
+
+        $info['updated_at'] = $info['updated_at']->diffInDays(Carbon::now()) > 30 * 6 ? "<fg=red>{$info['updated_at']->diffForHumans()}</>" : $info['updated_at']->diffForHumans();
         
+        $info['dependents'] = $metadata['dependents'] ?? 'N/A';
+        $info['suggesters'] = $metadata['suggesters'] ?? 'N/A';
+        $versionInfo = ($latestVersion ?? 'N/A') . " | " . ($package['version'] ?? 'N/A');
         return [
             $name,
             $license,
-            ($latestVersion ?? 'N/A') . " | " . ($package['version'] ?? 'N/A'),
+            $latestVersion == $currentVersion ?  "<fg=green>{$versionInfo}</>" : "<bg=red>{$versionInfo}</>",
             FormatHelper::humanNumber($info['stargazers_count']),
             FormatHelper::humanNumber($info['forks_count']),
             FormatHelper::humanNumber($info['open_issues_count']),
             FormatHelper::humanNumber($info['downloads']['total']),
             $info['updated_at'],
             ($info['release_data']['last_release_date'] ?? 'N/A') . " | " . ($info['release_data']['time_since_last_release'] ?? 'N/A'),
+            FormatHelper::humanNumber($info['dependents']),
+            FormatHelper::humanNumber($info['suggesters']),
         ];
     }
 }

@@ -32,6 +32,8 @@ class TableRenderer
             'Downloads',
             'Last Updated',
             'Last Release (Date | Time)',
+            'Dependents',
+            'Suggesters',
         ];
     }
 }
