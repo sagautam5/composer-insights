@@ -42,15 +42,10 @@ Before requesting or submitting a new feature, consider whether it will be usefu
     - Your feature or fix doesn't already exist in the codebase.
     - No one else has already submitted the same feature or fix.
     - The code passes all tests in different environments.
-    <!-- - The CI pipeline passes after your updates. -->
-    <!-- - Send pull request to the `dev` branch only. -->
 
 ## Requirements
 
 If the project maintainer has additional requirements, they will be listed here.
-<!-- 
-- **Add tests!** – Your patch won’t be accepted if it doesn’t include tests.
- -->
 
 - **Document any behavior changes** – Update the `README.md` or any other relevant documentation accordingly.
 - **One pull request per feature** – If you’re implementing multiple features, submit them as separate pull requests.
