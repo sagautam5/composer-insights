@@ -28,8 +28,6 @@
 ```
 🔍 Fetching Composer Dependency Insights
 
-🔍 Fetching Composer Dependency Insights
-
 +-------------------+---------+-----------------------+-----------------------------+-----------+--------------+----------------------------+
 | Package           | License | Version (Latest|Used) | Stars | Forks | Open Issues | Downloads | Last Updated | Last Release (Date | Time) |
 +-------------------+---------+-----------------------+-----------------------------+-----------+--------------+----------------------------+
