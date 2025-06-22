@@ -118,16 +118,21 @@ class AnalyzeCommand extends Command
         $info['dependents'] = $metadata['dependents'] ?? 'N/A';
         $info['suggesters'] = $metadata['suggesters'] ?? 'N/A';
         $versionInfo = ($latestVersion ?? 'N/A') . " | " . ($package['version'] ?? 'N/A');
+         
+        $releaseInfo = ($info['release_data']['last_release_date'] ?? 'N/A') . " | " . ($info['release_data']['time_since_last_release'] ?? 'N/A');
+
+        $versionInfo = $latestVersion == $currentVersion ? "<fg=green>{$versionInfo}</>" : "<bg=red>{$versionInfo}</>";
+
         return [
             $name,
             $license,
-            $latestVersion == $currentVersion ?  "<fg=green>{$versionInfo}</>" : "<bg=red>{$versionInfo}</>",
+            $versionInfo,
             FormatHelper::humanNumber($info['stargazers_count']),
             FormatHelper::humanNumber($info['forks_count']),
             FormatHelper::humanNumber($info['open_issues_count']),
             FormatHelper::humanNumber($info['downloads']['total']),
             $info['updated_at'],
-            ($info['release_data']['last_release_date'] ?? 'N/A') . " | " . ($info['release_data']['time_since_last_release'] ?? 'N/A'),
+            $releaseInfo,
             FormatHelper::humanNumber($info['dependents']),
             FormatHelper::humanNumber($info['suggesters']),
         ];

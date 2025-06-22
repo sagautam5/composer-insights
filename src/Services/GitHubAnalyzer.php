@@ -63,7 +63,7 @@ class GitHubAnalyzer
         $lastReleaseDate = Carbon::parse($releases[0]['published_at']);
     
         return [
-            'last_release_date' => $lastReleaseDate->toDateString(),
+            'last_release_date' => $lastReleaseDate->format('M j, Y'),
             'time_since_last_release' => ($lastReleaseDate->diffInMonths() >= 12 ? "⚠️  " : "") . $lastReleaseDate->diffForHumans(),
         ];
     }

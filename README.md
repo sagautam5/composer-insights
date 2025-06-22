@@ -24,23 +24,7 @@
 ---
 
 ## 💡Example Output
-
-```
-🔍 Fetching Composer Dependency Insights
-
-+-------------------+---------+-----------------------+-----------------------------+-----------+--------------+----------------------------+
-| Package           | License | Version (Latest|Used) | Stars | Forks | Open Issues | Downloads | Last Updated | Last Release (Date | Time) |
-+-------------------+---------+-----------------------+-----------------------------+-----------+--------------+----------------------------+
-| guzzlehttp/guzzle | MIT     | 7.9.3 | 7.9.3         | 23.4k | 2.4k | 31           | 845.5M    | 1 day ago    | 2025-03-27 | 2 months ago  |
-| nesbot/carbon     | MIT     | 3.9.1 | 3.9.1         | 89 | 12 | 2                 | 556.4M    | 8 hours ago  | 2025-05-01 | 4 weeks ago   |
-| symfony/console   | MIT     | v7.3.0 | v7.3.0       | 9.8k | 264 | 1              | 933.1M    | 23 hours ago | 2025-05-29 | 1 day ago     |
-| pestphp/pest      | MIT     | v3.8.2 | v3.8.2       | 10.3k | 386 | 168           | 33M       | 3 hours ago  | 2025-04-17 | 1 month ago   |
-+-------------------+---------+-----------------------+-----------------------------+-----------+--------------+----------------------------+
-
-✅ Done
-
-```
-
+![Sample Output](./images/sample-output.png)
 ---
 
 ## 📥 Installation
