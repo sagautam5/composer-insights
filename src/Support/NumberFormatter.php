@@ -2,7 +2,7 @@
 
 namespace ComposerInsights\Support;
 
-class FormatHelper
+class NumberFormatter
 {
     /**
      * Converts a number to a human-readable format.
@@ -15,8 +15,12 @@ class FormatHelper
      * @param int|string $number
      * @return string
      */
-    public static function humanNumber(int|string $number): string
+    public static function humanize(int|string|null $number): string
     {
+        if ($number === null) {
+            return 'N/A';
+        }
+        
         if (!is_numeric($number)) {
             return (string) $number;
         }

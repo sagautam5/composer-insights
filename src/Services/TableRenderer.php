@@ -2,16 +2,19 @@
 
 namespace ComposerInsights\Services;
 
+use ComposerInsights\Support\PackageInsight;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class TableRenderer
 {
-    public function render(array $rows, OutputInterface $output): void
+    public function render(array $insights, OutputInterface $output): void
     {
         $table = new Table($output);
         
         $table->setHeaders($this->getTableHeaders());
+
+        $rows = $this->formatInsights($insights);
 
         $table->addRows($rows);
         
@@ -34,5 +37,12 @@ class TableRenderer
             'Dependents',
             'Suggesters',
         ];
+    }
+
+    public function formatInsights(array $insights): array
+    {
+        return array_map(function ($data) {
+            return (new PackageInsight($data))->toArray();    
+        }, $insights);
     }
 }

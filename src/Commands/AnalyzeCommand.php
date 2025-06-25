@@ -5,12 +5,13 @@ namespace ComposerInsights\Commands;
 use Carbon\Carbon;
 use ComposerInsights\Services\GitHubAnalyzer;
 use ComposerInsights\Services\ComposerDependencyLoader;
+use ComposerInsights\Services\InsightCollector;
 use ComposerInsights\Services\PackagistInsightResolver;
 use ComposerInsights\Services\TableRenderer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use ComposerInsights\Support\FormatHelper;
+use ComposerInsights\Support\NumberFormatter;
 use Symfony\Component\Console\Input\InputOption;
 
 class AnalyzeCommand extends Command
@@ -44,99 +45,14 @@ class AnalyzeCommand extends Command
         $excludeDev = $input->getOption('no-dev');
 
         [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($includeDev, $excludeDev);
+        
+        $insights = (new InsightCollector())->collect($output, $packages, $explicitRequires);
 
-        $this->renderAnalysisTable($output, $packages, $explicitRequires);
-
+        $renderer = new TableRenderer();
+        
+        $renderer->render($insights, $output);
+        
         $output->writeln("\n<info>✅ Done</info>");
         return Command::SUCCESS;
-    }
-
-    private function renderAnalysisTable(OutputInterface $output, array $packages, array $explicitRequires): void
-    {
-        $rows = [];
-        foreach ($packages as $package) {
-            $row = $this->analyzePackage($package, $explicitRequires, $output);
-            
-            if ($row !== null) {
-                $rows[] = $row;
-            }
-        }
-        
-        $renderer = new TableRenderer();
-        $renderer->render($rows, $output);
-    }
-
-    private function analyzePackage(array $package, array $explicitRequires, OutputInterface $output): ?array
-    {
-        $analyzer = new GitHubAnalyzer(getenv('GITHUB_TOKEN') ?? null);
-        
-        $name = strtolower($package['name']);
-
-        if (!in_array($name, $explicitRequires, true)) {
-            return null;
-        }
-
-        $repoUrl = $package['source']['url'] ?? '';
-        if (!$repoUrl || !str_contains($repoUrl, 'github.com')) {
-            $output->writeln("[SKIP] {$name} (non-GitHub)");
-            return null;
-        }
-
-        $info = $analyzer->fetchRepoData($repoUrl);
-        if (isset($info['error'])) {
-            $output->writeln("[ERROR] {$name}: {$info['error']}");
-            return null;
-        }
-
-        $info['release_data'] = $analyzer->getReleaseData($repoUrl);
-        
-        $packagistResolver = new PackagistInsightResolver();
-        $metadata = $packagistResolver->fetchMetaData(...explode('/', $name));
-        
-        $license = $metadata['license'] ?? null;
-
-        if (!$license && isset($metadata['versions'])) {
-            foreach ($metadata['versions'] as $ver) {
-                if (!empty($ver['license'])) {
-                    $license = $ver['license'];
-                    break;
-                }
-            }
-        }
-        
-        $latestVersion = $packagistResolver->fetchLatestVersion(...explode('/', $name));
-        $currentVersion = $package['version'] ?? 'N/A';
-
-        $info['downloads'] = $metadata['downloads'] ?? ['total' => 'N/A'];
-        
-        $license = is_array($license) ? implode(', ', $license) : ($license ?? 'N/A');
-
-        $info['updated_at'] = Carbon::parse($info['updated_at']);
-
-        $info['updated_at'] = $info['updated_at']->diffInDays(Carbon::now()) > 30 * 6 ? "<fg=red>{$info['updated_at']->diffForHumans()}</>" : $info['updated_at']->diffForHumans();
-        
-        $info['dependents'] = $metadata['dependents'] ?? 'N/A';
-        $info['suggesters'] = $metadata['suggesters'] ?? 'N/A';
-        $latestVersion = $latestVersion ?? 'N/A';
-        $currentVersion = $package['version'] ?? 'N/A';
-         
-        $releaseInfo = ($info['release_data']['last_release_date'] ?? 'N/A') . " | " . ($info['release_data']['time_since_last_release'] ?? 'N/A');
-
-        $currentVersion = $latestVersion == $currentVersion ? "<fg=green>{$currentVersion}</>" : "<bg=red>{$currentVersion}</>";
-
-        return [
-            $name,
-            $license,
-            $latestVersion,
-            $currentVersion,
-            $info['updated_at'],
-            $releaseInfo,
-            FormatHelper::humanNumber($info['stargazers_count']),
-            FormatHelper::humanNumber($info['downloads']['total']),
-            FormatHelper::humanNumber($info['forks_count']),
-            FormatHelper::humanNumber($info['open_issues_count']),
-            FormatHelper::humanNumber($info['dependents']),
-            FormatHelper::humanNumber($info['suggesters']),
-        ];
     }
 }
