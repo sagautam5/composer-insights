@@ -15,21 +15,26 @@ class ComposerDependencyLoader
             throw new \InvalidArgumentException('Cannot include and exclude dev dependencies at the same time.');
         }
 
-        $json = json_decode(file_get_contents('composer.json'), true);
-        $lock = json_decode(file_get_contents('composer.lock'), true);
+        $json = $this->decodeJsonFile('composer.json');
+        $lock = $this->decodeJsonFile('composer.lock');
+
+        $require = $json['require'] ?? [];
+        $requireDev = $json['require-dev'] ?? [];
 
         $requires = match (true) {
-            $excludeDev => array_keys($json['require'] ?? []),
-            $includeDev => array_keys($json['require-dev'] ?? []),
-            default => array_merge(
-                array_keys($json['require'] ?? []),
-                array_keys($json['require-dev'] ?? [])
-            ),
+            $excludeDev => array_keys($require),
+            $includeDev => array_keys($requireDev),
+            default => array_merge(array_keys($require), array_keys($requireDev)),
         };
 
         $requires = array_map('strtolower', $requires);
         $packages = array_merge($lock['packages'] ?? [], $lock['packages-dev'] ?? []);
 
         return [$requires, $packages];
+    }
+
+    private function decodeJsonFile(string $filePath): array
+    {
+        return json_decode(file_get_contents($filePath), true);
     }
 }

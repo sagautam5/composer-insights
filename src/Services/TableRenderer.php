@@ -13,9 +13,7 @@ class TableRenderer
         
         $table->setHeaders($this->getTableHeaders());
 
-        foreach ($rows as $row) {
-            $table->addRow($row);
-        }
+        $table->addRows($rows);
         
         $table->render();
     }
@@ -25,13 +23,14 @@ class TableRenderer
         return [
             'Package',
             'License',
-            'Version (Latest|Used)',
+            'Latest Version',
+            'Used Version',
+            'Last Updated',
+            'Last Release (Date | Time)',
+            'Downloads',
             'Stars', 
             'Forks',
             'Open Issues',
-            'Downloads',
-            'Last Updated',
-            'Last Release (Date | Time)',
             'Dependents',
             'Suggesters',
         ];

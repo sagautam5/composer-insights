@@ -46,13 +46,19 @@ class PackagistInsightResolver
             'http' => ['header' => 'User-Agent: ' . self::USER_AGENT]
         ]);
 
-        $json = @file_get_contents($url, false, $context);
+        $json = file_get_contents($url, false, $context);
 
-        if (!$json) {
-            return null;
+        if ($json === false) {
+            throw new \RuntimeException("Failed to fetch data from URL: $url");
         }
 
-        return json_decode($json, true);
+        $decoded = json_decode($json, true);
+        
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException("Invalid JSON from $url: " . json_last_error_msg());
+        }
+
+        return $decoded;
     }
 
     protected function isStableVersion(array $versionData): bool

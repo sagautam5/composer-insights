@@ -42,8 +42,7 @@ class GitHubAnalyzer
             return ['error' => $e->getMessage()];
         }
     }
-
-    public function getReleaseData(string $repoUrl)
+    public function getReleaseData(string $repoUrl): array
     {
         $ownerAndRepo = $this->extractOwnerRepo($repoUrl);
 
@@ -51,21 +50,24 @@ class GitHubAnalyzer
             return ['error' => 'Invalid GitHub URL: ' . $repoUrl];
         }
 
-    
-        $releaseUrl = $this->getReleaseUrl($ownerAndRepo);
+        try {
+            $releaseUrl = $this->getReleaseUrl($ownerAndRepo);
+            $response = $this->client->get($releaseUrl);
+            $releases = json_decode((string) $response->getBody(), true);
 
-        $releases = json_decode($this->client->get($releaseUrl)->getBody(), true);
-    
-        if (empty($releases[0]['published_at'])) {
-            return ['error' => 'No releases found'];
+            if (empty($releases[0]['published_at'])) {
+                return ['error' => 'No releases found'];
+            }
+
+            $lastReleaseDate = Carbon::parse($releases[0]['published_at']);
+
+            return [
+                'last_release_date' => $lastReleaseDate->format('M j, Y'),
+                'time_since_last_release' => ($lastReleaseDate->diffInMonths() >= 12 ? "⚠️  " : "") . $lastReleaseDate->diffForHumans(),
+            ];
+        } catch (GuzzleException|\Throwable $e) {
+            return ['error' => $e->getMessage()];
         }
-    
-        $lastReleaseDate = Carbon::parse($releases[0]['published_at']);
-    
-        return [
-            'last_release_date' => $lastReleaseDate->format('M j, Y'),
-            'time_since_last_release' => ($lastReleaseDate->diffInMonths() >= 12 ? "⚠️  " : "") . $lastReleaseDate->diffForHumans(),
-        ];
     }
 
     protected function extractOwnerRepo(string $url): ?string
@@ -74,6 +76,7 @@ class GitHubAnalyzer
         
         return $matches[1] ?? null;
     }
+
 
     protected function getReleaseUrl(string $ownerAndRepo): string
     {

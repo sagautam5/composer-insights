@@ -117,22 +117,24 @@ class AnalyzeCommand extends Command
         
         $info['dependents'] = $metadata['dependents'] ?? 'N/A';
         $info['suggesters'] = $metadata['suggesters'] ?? 'N/A';
-        $versionInfo = ($latestVersion ?? 'N/A') . " | " . ($package['version'] ?? 'N/A');
+        $latestVersion = $latestVersion ?? 'N/A';
+        $currentVersion = $package['version'] ?? 'N/A';
          
         $releaseInfo = ($info['release_data']['last_release_date'] ?? 'N/A') . " | " . ($info['release_data']['time_since_last_release'] ?? 'N/A');
 
-        $versionInfo = $latestVersion == $currentVersion ? "<fg=green>{$versionInfo}</>" : "<bg=red>{$versionInfo}</>";
+        $currentVersion = $latestVersion == $currentVersion ? "<fg=green>{$currentVersion}</>" : "<bg=red>{$currentVersion}</>";
 
         return [
             $name,
             $license,
-            $versionInfo,
-            FormatHelper::humanNumber($info['stargazers_count']),
-            FormatHelper::humanNumber($info['forks_count']),
-            FormatHelper::humanNumber($info['open_issues_count']),
-            FormatHelper::humanNumber($info['downloads']['total']),
+            $latestVersion,
+            $currentVersion,
             $info['updated_at'],
             $releaseInfo,
+            FormatHelper::humanNumber($info['stargazers_count']),
+            FormatHelper::humanNumber($info['downloads']['total']),
+            FormatHelper::humanNumber($info['forks_count']),
+            FormatHelper::humanNumber($info['open_issues_count']),
             FormatHelper::humanNumber($info['dependents']),
             FormatHelper::humanNumber($info['suggesters']),
         ];
