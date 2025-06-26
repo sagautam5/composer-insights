@@ -19,6 +19,8 @@ class TableRenderer
         $table->addRows($rows);
         
         $table->render();
+
+        $output->writeln("\n<info>✅ Done</info>");
     }
 
     public function getTableHeaders(): array

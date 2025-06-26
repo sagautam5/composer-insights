@@ -18,15 +18,15 @@ class CsvExporter extends BaseExporter
 
         fputcsv($handle, $headers);
 
-        foreach ($insights as $row) {
-            $rowValues = [];
-            foreach ($row as $category => $items) {
+        foreach ($insights as $insight) {
+            $rowToBeWritten = [];
+            foreach ($insight as $items) {
                 foreach ($items as $key =>$item) {
-                    $rowValues[$key] = $item;
+                    $rowToBeWritten[$key] = $item;
                 }
 
             }
-            fputcsv($handle, $rowValues);
+            fputcsv($handle, $rowToBeWritten);
         }
 
         fclose($handle);

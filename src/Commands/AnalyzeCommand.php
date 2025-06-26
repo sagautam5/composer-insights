@@ -59,18 +59,8 @@ class AnalyzeCommand extends Command
             return Command::SUCCESS;
         }
         
-        $this->renderInConsole($insights, $output);
+        (new TableRenderer())->render($insights, $output);
         
         return Command::SUCCESS;
-    }
-
-
-    private function renderInConsole(array $insights, OutputInterface $output)
-    {
-        $renderer = new TableRenderer();
-        
-        $renderer->render($insights, $output);
-        
-        $output->writeln("\n<info>✅ Done</info>");
     }
 }
