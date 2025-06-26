@@ -21,7 +21,7 @@ class TableRenderer
         $table->render();
     }
 
-    private function getTableHeaders(): array
+    public function getTableHeaders(): array
     {
         return [
             'Package',

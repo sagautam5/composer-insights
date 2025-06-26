@@ -2,16 +2,14 @@
 
 namespace ComposerInsights\Commands;
 
-use Carbon\Carbon;
-use ComposerInsights\Services\GitHubAnalyzer;
+use ComposerInsights\Exporters\CsvExporter;
+use ComposerInsights\Exporters\JsonExporter;
 use ComposerInsights\Services\ComposerDependencyLoader;
 use ComposerInsights\Services\InsightCollector;
-use ComposerInsights\Services\PackagistInsightResolver;
 use ComposerInsights\Services\TableRenderer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use ComposerInsights\Support\NumberFormatter;
 use Symfony\Component\Console\Input\InputOption;
 
 class AnalyzeCommand extends Command
@@ -27,7 +25,8 @@ class AnalyzeCommand extends Command
     {
         $this->setDescription('Analyzes the current composer files and provides insights.')
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Include dev dependencies')
-            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Exclude dev dependencies');
+            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Exclude dev dependencies')
+            ->addOption('export', mode: InputOption::VALUE_REQUIRED, description: 'Output results as JSON', suggestedValues: ['json', 'csv']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -43,16 +42,35 @@ class AnalyzeCommand extends Command
 
         $includeDev = $input->getOption('dev');
         $excludeDev = $input->getOption('no-dev');
+        $export = $input->getOption('export');
 
         [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($includeDev, $excludeDev);
         
         $insights = (new InsightCollector())->collect($output, $packages, $explicitRequires);
 
+        if($export) {
+            $exporter = match ($export) {
+                'json' => new JsonExporter(),
+                'csv' => new CsvExporter(),
+                default => null,
+            }; 
+            
+            $exporter->export($insights, $output);
+            return Command::SUCCESS;
+        }
+        
+        $this->renderInConsole($insights, $output);
+        
+        return Command::SUCCESS;
+    }
+
+
+    private function renderInConsole(array $insights, OutputInterface $output)
+    {
         $renderer = new TableRenderer();
         
         $renderer->render($insights, $output);
         
         $output->writeln("\n<info>✅ Done</info>");
-        return Command::SUCCESS;
     }
 }

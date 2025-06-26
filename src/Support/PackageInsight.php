@@ -1,6 +1,7 @@
 <?php 
 
 namespace ComposerInsights\Support;
+use ComposerInsights\Formatters\NumberFormatter;
 
 class PackageInsight
 {
@@ -31,6 +32,27 @@ class PackageInsight
         $this->openIssues = $this->formatNumber($this->data['health']['open_issues']);
         $this->dependents = $this->formatNumber($this->data['health']['dependents']);
         $this->suggesters = $this->formatNumber($this->data['health']['suggesters']);
+    }
+
+    public function headers(): array
+    {
+        return [
+            'package_name',
+            'package_license',
+            'version_latest',
+            'version_used',
+            'version_is_outdated',
+            'maintenance_updated_at',
+            'maintenance_is_stale',
+            'release_latest_at',
+            'release_time_since',
+            'popularity_downloads',
+            'popularity_stars',
+            'popularity_forks',
+            'health_open_issues',
+            'health_dependents',
+            'health_suggesters',
+        ];
     }
 
     public function toArray(): array

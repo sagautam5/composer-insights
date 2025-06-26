@@ -1,6 +1,6 @@
 <?php
 
-namespace ComposerInsights\Support;
+namespace ComposerInsights\Formatters;
 
 class NumberFormatter
 {

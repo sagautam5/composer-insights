@@ -1,6 +1,6 @@
 <?php
 
-use ComposerInsights\Support\NumberFormatter;
+use ComposerInsights\Formatters\NumberFormatter;
 
 test('it formats null values', function () {
     expect(NumberFormatter::humanize(null))->toBe('N/A');
