@@ -94,3 +94,36 @@ it('gracefully handles non-numeric values in popularity or health fields', funct
         ->and($insight->dependents)->toBe('N/A')
         ->and($insight->suggesters)->toBe('0');
 });
+
+it('test headers', function(){
+    $data = [
+        'package' => ['name' => 'pkg/example', 'license' => 'BSD'],
+        'version' => ['latest' => '1.0.1', 'used' => '1.0.1'],
+        'maintenance' => ['updated_at' => '3 days ago'],
+        'release' => ['latest_at' => '2025-06-01', 'time_since' => 'just now'],
+        'popularity' => ['downloads' => 'N/A', 'stars' => null, 'forks' => null],
+        'health' => ['open_issues' => false, 'dependents' => null, 'suggesters' => 0],
+    ];
+
+    $insight = new PackageInsight($data);
+    $headers = $insight->headers();
+
+    expect($headers)->not->toBeEmpty();
+    expect($headers)->toHaveCount(15);
+    
+    expect($headers)->toContain('package_name');
+    expect($headers)->toContain('package_license');
+    expect($headers)->toContain('version_latest');
+    expect($headers)->toContain('version_used');
+    expect($headers)->toContain('version_is_outdated');
+    expect($headers)->toContain('maintenance_updated_at');
+    expect($headers)->toContain('maintenance_is_stale');
+    expect($headers)->toContain('release_latest_at');
+    expect($headers)->toContain('release_time_since');
+    expect($headers)->toContain('popularity_downloads');
+    expect($headers)->toContain('popularity_stars');
+    expect($headers)->toContain('popularity_forks');
+    expect($headers)->toContain('health_open_issues');
+    expect($headers)->toContain('health_dependents');
+    expect($headers)->toContain('health_suggesters');
+});

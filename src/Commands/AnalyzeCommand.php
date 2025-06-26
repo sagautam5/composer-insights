@@ -42,6 +42,7 @@ class AnalyzeCommand extends Command
 
         $includeDev = $input->getOption('dev');
         $excludeDev = $input->getOption('no-dev');
+
         $export = $input->getOption('export');
 
         [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($includeDev, $excludeDev);
@@ -52,7 +53,6 @@ class AnalyzeCommand extends Command
             $exporter = match ($export) {
                 'json' => new JsonExporter(),
                 'csv' => new CsvExporter(),
-                default => null,
             }; 
             
             $exporter->export($insights, $output);
