@@ -16,7 +16,7 @@ abstract class BaseExporter
             return __DIR__ . '/../../output/';
         }
 
-        return __DIR__ . '/../../../output/';
+        return __DIR__ . '/../../../../../output/';
     }
 
     protected function createDirectoryIfNotExists($path)
