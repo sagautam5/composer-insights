@@ -1,0 +1,512 @@
+[
+    {
+        "package": {
+            "name": "bezhansalleh\/filament-shield",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 2340,
+            "forks": 235,
+            "downloads": 1396282
+        },
+        "release": {
+            "latest_at": "Jun 18, 2025",
+            "time_since": "1 week ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "18 hours ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 80,
+            "suggesters": 0,
+            "open_issues": 11
+        },
+        "version": {
+            "latest": "4.0.0-beta",
+            "used": "3.3.8",
+            "is_outdated": true
+        }
+    },
+    {
+        "package": {
+            "name": "filament\/filament",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 34,
+            "forks": 16,
+            "downloads": 12046404
+        },
+        "release": {
+            "latest_at": "N\/A",
+            "time_since": "N\/A",
+            "no_recent_release": "N\/A"
+        },
+        "maintenance": {
+            "updated_at": "1 week ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 1468,
+            "suggesters": 7,
+            "open_issues": 0
+        },
+        "version": {
+            "latest": "v4.0.0-beta10",
+            "used": "v3.3.29",
+            "is_outdated": true
+        }
+    },
+    {
+        "package": {
+            "name": "ibrahimbougaoua\/filament-rating-star",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 41,
+            "forks": 17,
+            "downloads": 54244
+        },
+        "release": {
+            "latest_at": "Sep 24, 2024",
+            "time_since": "9 months ago",
+            "no_recent_release": true
+        },
+        "maintenance": {
+            "updated_at": "5 days ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 2,
+            "suggesters": 0,
+            "open_issues": 5
+        },
+        "version": {
+            "latest": "v1.0.4",
+            "used": "v1.0.4",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "laravel\/framework",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 33758,
+            "forks": 11428,
+            "downloads": 436317623
+        },
+        "release": {
+            "latest_at": "Jun 18, 2025",
+            "time_since": "1 week ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "1 hour ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 18313,
+            "suggesters": 179,
+            "open_issues": 94
+        },
+        "version": {
+            "latest": "v12.19.3",
+            "used": "v11.45.1",
+            "is_outdated": true
+        }
+    },
+    {
+        "package": {
+            "name": "laravel\/tinker",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 7385,
+            "forks": 130,
+            "downloads": 355510153
+        },
+        "release": {
+            "latest_at": "Jan 28, 2025",
+            "time_since": "5 months ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "3 days ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 2204,
+            "suggesters": 39,
+            "open_issues": 0
+        },
+        "version": {
+            "latest": "v2.10.1",
+            "used": "v2.10.1",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "spatie\/laravel-settings",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 1356,
+            "forks": 123,
+            "downloads": 3540078
+        },
+        "release": {
+            "latest_at": "Apr 11, 2025",
+            "time_since": "2 months ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "10 hours ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 40,
+            "suggesters": 1,
+            "open_issues": 4
+        },
+        "version": {
+            "latest": "3.4.4",
+            "used": "3.4.4",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "stechstudio\/filament-impersonate",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 327,
+            "forks": 75,
+            "downloads": 1432520
+        },
+        "release": {
+            "latest_at": "Apr 15, 2025",
+            "time_since": "2 months ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "4 days ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 27,
+            "suggesters": 0,
+            "open_issues": 21
+        },
+        "version": {
+            "latest": "3.16",
+            "used": "3.16",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "fakerphp\/faker",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 3802,
+            "forks": 376,
+            "downloads": 287637446
+        },
+        "release": {
+            "latest_at": "Nov 21, 2024",
+            "time_since": "7 months ago",
+            "no_recent_release": true
+        },
+        "maintenance": {
+            "updated_at": "2 days ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 3267,
+            "suggesters": 54,
+            "open_issues": 20
+        },
+        "version": {
+            "latest": "v1.24.1",
+            "used": "v1.24.1",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "laravel\/pail",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 852,
+            "forks": 26,
+            "downloads": 16658330
+        },
+        "release": {
+            "latest_at": "Jun 5, 2025",
+            "time_since": "3 weeks ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "2 days ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 354,
+            "suggesters": 0,
+            "open_issues": 3
+        },
+        "version": {
+            "latest": "v1.2.3",
+            "used": "v1.2.3",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "laravel\/pint",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 2929,
+            "forks": 153,
+            "downloads": 103851849
+        },
+        "release": {
+            "latest_at": "May 8, 2025",
+            "time_since": "1 month ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "1 day ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 8952,
+            "suggesters": 11,
+            "open_issues": 21
+        },
+        "version": {
+            "latest": "v1.22.1",
+            "used": "v1.22.1",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "laravel\/sail",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 1794,
+            "forks": 496,
+            "downloads": 144834549
+        },
+        "release": {
+            "latest_at": "May 27, 2025",
+            "time_since": "1 month ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "3 days ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 1044,
+            "suggesters": 0,
+            "open_issues": 13
+        },
+        "version": {
+            "latest": "v1.43.1",
+            "used": "v1.43.1",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "mockery\/mockery",
+            "license": "BSD-3-Clause"
+        },
+        "popularity": {
+            "stars": 10695,
+            "forks": 464,
+            "downloads": 429848233
+        },
+        "release": {
+            "latest_at": "May 16, 2024",
+            "time_since": "1 year ago",
+            "no_recent_release": true
+        },
+        "maintenance": {
+            "updated_at": "23 hours ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 25125,
+            "suggesters": 49,
+            "open_issues": 116
+        },
+        "version": {
+            "latest": "1.6.12",
+            "used": "1.6.12",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "nunomaduro\/collision",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 4606,
+            "forks": 167,
+            "downloads": 274592766
+        },
+        "release": {
+            "latest_at": "N\/A",
+            "time_since": "N\/A",
+            "no_recent_release": "N\/A"
+        },
+        "maintenance": {
+            "updated_at": "2 days ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 7507,
+            "suggesters": 9,
+            "open_issues": 23
+        },
+        "version": {
+            "latest": "v8.8.2",
+            "used": "v8.8.2",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "pestphp\/pest",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 10381,
+            "forks": 389,
+            "downloads": 36434674
+        },
+        "release": {
+            "latest_at": "Apr 17, 2025",
+            "time_since": "2 months ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "7 hours ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 10009,
+            "suggesters": 6,
+            "open_issues": 169
+        },
+        "version": {
+            "latest": "v3.8.2",
+            "used": "v3.8.2",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "phpstan\/phpstan",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 13455,
+            "forks": 924,
+            "downloads": 279387186
+        },
+        "release": {
+            "latest_at": "May 21, 2025",
+            "time_since": "1 month ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "1 hour ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 24835,
+            "suggesters": 68,
+            "open_issues": 1400
+        },
+        "version": {
+            "latest": "2.1.17",
+            "used": "2.1.17",
+            "is_outdated": false
+        }
+    },
+    {
+        "package": {
+            "name": "phpunit\/phpunit",
+            "license": "BSD-3-Clause"
+        },
+        "popularity": {
+            "stars": 19874,
+            "forks": 2214,
+            "downloads": 800131581
+        },
+        "release": {
+            "latest_at": "Jun 27, 2025",
+            "time_since": "2 days ago",
+            "no_recent_release": false
+        },
+        "maintenance": {
+            "updated_at": "23 hours ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 143260,
+            "suggesters": 224,
+            "open_issues": 119
+        },
+        "version": {
+            "latest": "12.2.5",
+            "used": "11.5.15",
+            "is_outdated": true
+        }
+    },
+    {
+        "package": {
+            "name": "sagautam5\/composer-insights",
+            "license": "MIT"
+        },
+        "popularity": {
+            "stars": 0,
+            "forks": 0,
+            "downloads": 2
+        },
+        "release": {
+            "latest_at": "N\/A",
+            "time_since": "N\/A",
+            "no_recent_release": "N\/A"
+        },
+        "maintenance": {
+            "updated_at": "34 minutes ago",
+            "is_stale": false
+        },
+        "health": {
+            "dependents": 0,
+            "suggesters": 0,
+            "open_issues": 0
+        },
+        "version": {
+            "latest": "N\/A",
+            "used": "dev-master",
+            "is_outdated": true
+        }
+    }
+]

@@ -1,0 +1,18 @@
+package_name,package_license,version_latest,version_used,version_is_outdated,maintenance_updated_at,maintenance_is_stale,release_latest_at,release_time_since,popularity_downloads,popularity_stars,popularity_forks,health_open_issues,health_dependents,health_suggesters
+bezhansalleh/filament-shield,MIT,2340,235,1396282,"Jun 18, 2025","1 week ago",,"19 hours ago",,80,0,11,4.0.0-beta,3.3.8,1
+filament/filament,MIT,34,16,12046404,N/A,N/A,N/A,"1 week ago",,1468,7,0,v4.0.0-beta10,v3.3.29,1
+ibrahimbougaoua/filament-rating-star,MIT,41,17,54244,"Sep 24, 2024","9 months ago",1,"5 days ago",,2,0,5,v1.0.4,v1.0.4,
+laravel/framework,MIT,33758,11428,436317623,"Jun 18, 2025","1 week ago",,"1 hour ago",,18313,179,94,v12.19.3,v11.45.1,1
+laravel/tinker,MIT,7385,130,355510153,"Jan 28, 2025","5 months ago",,"3 days ago",,2204,39,0,v2.10.1,v2.10.1,
+spatie/laravel-settings,MIT,1356,123,3540078,"Apr 11, 2025","2 months ago",,"10 hours ago",,40,1,4,3.4.4,3.4.4,
+stechstudio/filament-impersonate,MIT,327,75,1432520,"Apr 15, 2025","2 months ago",,"4 days ago",,27,0,21,3.16,3.16,
+fakerphp/faker,MIT,3802,376,287637446,"Nov 21, 2024","7 months ago",1,"2 days ago",,3267,54,20,v1.24.1,v1.24.1,
+laravel/pail,MIT,852,26,16658330,"Jun 5, 2025","3 weeks ago",,"2 days ago",,354,0,3,v1.2.3,v1.2.3,
+laravel/pint,MIT,2929,153,103851849,"May 8, 2025","1 month ago",,"1 day ago",,8952,11,21,v1.22.1,v1.22.1,
+laravel/sail,MIT,1794,496,144834549,"May 27, 2025","1 month ago",,"3 days ago",,1044,0,13,v1.43.1,v1.43.1,
+mockery/mockery,BSD-3-Clause,10695,464,429848233,"May 16, 2024","1 year ago",1,"23 hours ago",,25125,49,116,1.6.12,1.6.12,
+nunomaduro/collision,MIT,4606,167,274592766,N/A,N/A,N/A,"2 days ago",,7507,9,23,v8.8.2,v8.8.2,
+pestphp/pest,MIT,10381,389,36434674,"Apr 17, 2025","2 months ago",,"7 hours ago",,10009,6,169,v3.8.2,v3.8.2,
+phpstan/phpstan,MIT,13455,924,279387186,"May 21, 2025","1 month ago",,"1 hour ago",,24835,68,1400,2.1.17,2.1.17,
+phpunit/phpunit,BSD-3-Clause,19874,2214,800131581,"Jun 27, 2025","2 days ago",,"23 hours ago",,143260,224,119,12.2.5,11.5.15,1
+sagautam5/composer-insights,MIT,0,0,2,"Jun 29, 2025","1 minute ago",,"37 minutes ago",,0,0,0,N/A,dev-master,1

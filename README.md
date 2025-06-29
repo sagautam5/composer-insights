@@ -27,9 +27,21 @@
 ```bash
 vendor\bin\composer-insights analyze
 ```
-![Sample Output](./images/SampleOutput.png)
+![Sample Console Output](./images/SampleOutput.png)
 ---
+```bash
+vendor\bin\composer-insights analyze --export=json
+```
+[Sample JSON Output](./exports/data.json)
 
+---
+```bash
+vendor\bin\composer-insights analyze --export=csv
+```
+
+[Sample CSV Output](./exports/data.csv)
+
+---
 ## 📋 Requirements
 
 - PHP 8.2 or higher
