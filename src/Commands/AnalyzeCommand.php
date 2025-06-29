@@ -42,7 +42,7 @@ class AnalyzeCommand extends Command
 
         $inputOptions = (new InputOptionResolver())->resolve($input);
         
-        [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($inputOptions['dev'], $inputOptions['no-dev']);
+        [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($inputOptions['dev'], $inputOptions['prod']);
         
         $insights = (new InsightCollector($inputOptions['days']))->collect($output, $packages, $explicitRequires);
 

@@ -20,7 +20,7 @@
 - 🧹 Clean tabular output in the terminal
 - 🛑 Gracefully skips non-GitHub packages
 - ⚡ Fast, dependency-free CLI experience
-
+- 📊 Clean color-coded analysis summary
 ---
 
 ## 💡Example Output
@@ -28,6 +28,14 @@
 vendor\bin\composer-insights analyze --days=10
 ```
 ![Sample Output](./images/sample-output.png)
+---
+
+## 📋 Requirements
+
+- PHP 8.0 or higher
+- A Composer-based project
+- Internet connection
+
 ---
 
 ## 📥 Installation
@@ -69,34 +77,30 @@ Run the following command to start the analysis:
 vendor/bin/composer-insights analyze
 ```
 
-### 🔧 Command Options
+## 🔧 Command Options for `analyze`
 
- **Development Dependencies**
+Here are the available options for the `analyze` command:
 
-You can control whether to include or exclude development dependencies using these options:
+| Option            | Description                                                               |
+| ----------------- | ------------------------------------------------------------------------- |
+| `--days=180`      | *(Optional)* Number of days to look back for health check (default: 180). |
+| `--dev`           | Include only development dependencies in the analysis.                    |
+| `--prod`          | Include only production dependencies in the analysis.                     |
+| `--export=FORMAT` | Export results to a file. Accepts `json` or `csv`.                        |
+| `--no-summary`    | Do not show summary statistics in the console output.                     |
+| `--no-table`      | Do not show the table view in the console output.                         |
 
-- `--dev`: Include development dependencies in the analysis
-- `--no-dev`: Exclude development dependencies from the analysis
-
-By default, all dependencies will be considered
-
-
-This will:
-
-- Parse your composer file
-- Check each direct dependency (ignores transitive)
-- Fetch GitHub and Packagist stats
-- Display a beautiful CLI table
+By default, all dependencies (both production and development) will be analyzed.
 
 ---
 
-## 📋 Requirements
+### 🛠️ What This Command Does
 
-- PHP 8.0 or higher
-- A Composer-based project
-- Internet connection
-
----
+- Parses your `composer.json` and `composer.lock`
+- Analyzes only **direct dependencies** (ignores transitive)
+- Fetches GitHub and Packagist stats
+- Displays a clean, color-coded CLI table
+- Displays a clean, color-coded summary
 
 ## 🪪 License
 

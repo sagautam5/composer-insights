@@ -11,7 +11,7 @@ class InputOptionResolver
         return [
             'days' => $input->getOption('days'),
             'dev' => $input->getOption('dev'),
-            'no-dev' => $input->getOption('no-dev'),
+            'prod' => $input->getOption('prod'),
             'no-summary' => $input->getOption('no-summary'),
             'no-table' => $input->getOption('no-table'),
             'export' => $input->getOption('export'),
