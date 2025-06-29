@@ -10,10 +10,13 @@ class InsightCollector
 
     private PackagistInsightResolver $packagistInsightResolver;
 
-    public function __construct()
+    protected int $days;
+
+    public function __construct(int $days = 180)
     {
-        $this->githubAnalyser = new GitHubAnalyzer(getenv('GITHUB_TOKEN') ?? null);
+        $this->githubAnalyser = new GitHubAnalyzer(getenv('GITHUB_TOKEN') ?? null, $days);
         $this->packagistInsightResolver = new PackagistInsightResolver();
+        $this->days = $days;
     }
     public function collect(OutputInterface $output, array $packages, array $explicitRequires): array
     {
@@ -70,7 +73,7 @@ class InsightCollector
             'release' => $this->githubAnalyser->getReleaseData($repoUrl),
             'maintenance' => [
                 'updated_at' => $updatedAt->diffForHumans(),
-                'is_stale' => $updatedAt->diffInDays(Carbon::now()) > 30 * 6 ? true : false,
+                'is_stale' => $updatedAt->lt(Carbon::now()->subDays($this->days)),
             ],
             'health' => [
                 'dependents' => $metadata['dependents'] ?? 'N/A',

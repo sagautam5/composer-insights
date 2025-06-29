@@ -10,7 +10,9 @@ class GitHubAnalyzer
 {
     protected Client $client;
 
-    public function __construct(?string $githubToken)
+    protected int $days;
+
+    public function __construct(?string $githubToken, int $days = 180)
     {
         $headers = [
             'Accept' => 'application/vnd.github.v3+json',
@@ -24,6 +26,8 @@ class GitHubAnalyzer
             'base_uri' => 'https://api.github.com/',
             'headers' => $headers,
         ]);
+
+        $this->days = $days;
     }
 
     public function fetchRepoData(string $repoUrl): array
@@ -63,7 +67,8 @@ class GitHubAnalyzer
 
             return [
                 'latest_at' => $lastReleaseDate->format('M j, Y'),
-                'time_since' => ($lastReleaseDate->diffInMonths() >= 12 ? "⚠️  " : "") . $lastReleaseDate->diffForHumans(),
+                'time_since' => $lastReleaseDate->diffForHumans(),
+                'no_recent_release' => $lastReleaseDate->lt(Carbon::now()->subDays($this->days)),
             ];
         } catch (GuzzleException|\Throwable $e) {
             return ['error' => $e->getMessage()];

@@ -24,6 +24,9 @@
 ---
 
 ## 💡Example Output
+```bash
+vendor\bin\composer-insights analyze --days=10
+```
 ![Sample Output](./images/sample-output.png)
 ---
 

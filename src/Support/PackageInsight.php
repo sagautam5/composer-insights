@@ -17,6 +17,9 @@ class PackageInsight
     public string $openIssues;
     public string $dependents;
     public string $suggesters;
+    public bool $isStale;
+    public bool $isOutdated;
+    public bool $noReleaseInPastYear;
     
     public function __construct(public array $data)
     {    
@@ -32,6 +35,9 @@ class PackageInsight
         $this->openIssues = $this->formatNumber($this->data['health']['open_issues']);
         $this->dependents = $this->formatNumber($this->data['health']['dependents']);
         $this->suggesters = $this->formatNumber($this->data['health']['suggesters']);
+        $this->isStale = $this->data['maintenance']['is_stale'];
+        $this->isOutdated = $this->data['version']['is_outdated'];
+        $this->noReleaseInPastYear = $this->data['release']['no_recent_release'];
     }
 
     public function headers(): array
@@ -60,10 +66,10 @@ class PackageInsight
         return [
             'package' => $this->package,
             'license' => $this->license,
-            'latestVersion' => $this->latestVersion,
-            'usedVersion' => $this->usedVersion,
-            'updatedAt' => $this->updatedAt,
-            'latestRelease' => $this->latestRelease,
+            'latestVersion' => $this->formatLatestVersion(),
+            'usedVersion' => $this->formatUsedVersion(),
+            'updatedAt' => $this->formatUpdatedAt(),
+            'latestRelease' => $this->formatLatestRelease(),
             'downloads' => $this->downloads,
             'stars' => $this->stars,
             'forks' => $this->forks,
@@ -76,5 +82,25 @@ class PackageInsight
     private function formatNumber($number): string
     {
         return NumberFormatter::humanize($number);
+    }
+
+    private function formatLatestRelease(): string
+    {
+        return $this->noReleaseInPastYear ? '<comment>' . $this->latestRelease . '</comment>' : $this->latestRelease;
+    }
+
+    private function formatLatestVersion(): string
+    {
+        return $this->isOutdated ? '<info>' . $this->latestVersion . '</info>' : $this->latestVersion;
+    }
+
+    private function formatUsedVersion(): string
+    {
+        return $this->isOutdated ? '<comment>' . $this->usedVersion . '</comment>' : $this->usedVersion;
+    }
+
+    private function formatUpdatedAt(): string
+    {
+        return $this->isStale ? '<comment>' . $this->updatedAt . '</comment>' : $this->updatedAt;
     }
 }

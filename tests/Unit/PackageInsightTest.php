@@ -11,13 +11,16 @@ it('initializes all public properties correctly', function () {
         'version' => [
             'latest' => '1.2.3',
             'used' => '1.0.0',
+            'is_outdated' => false,
         ],
         'maintenance' => [
             'updated_at' => '2 weeks ago',
+            'is_stale' => false,
         ],
         'release' => [
             'latest_at' => '2025-04-01',
             'time_since' => '2 months ago',
+            'no_recent_release' => false,
         ],
         'popularity' => [
             'downloads' => 123456,
@@ -49,12 +52,34 @@ it('initializes all public properties correctly', function () {
 
 it('converts the object to an array correctly', function () {
     $data = [
-        'package' => ['name' => 'sample/pkg', 'license' => 'Apache-2.0'],
-        'version' => ['latest' => '2.0.0', 'used' => '1.8.0'],
-        'maintenance' => ['updated_at' => 'yesterday'],
-        'release' => ['latest_at' => '2025-05-01', 'time_since' => '1 month ago'],
-        'popularity' => ['downloads' => 1_000_000, 'stars' => 1000, 'forks' => 50],
-        'health' => ['open_issues' => 5, 'dependents' => 200, 'suggesters' => 10],
+        'package' => [
+            'name' => 'sample/pkg', 
+            'license' => 'Apache-2.0'
+        ],
+        'version' => [
+            'latest' => '2.0.0', 
+            'used' => '1.8.0', 
+            'is_outdated' => false
+        ],
+        'maintenance' => [
+            'updated_at' => 'yesterday', 
+            'is_stale' => false
+        ],
+        'release' => [
+            'latest_at' => '2025-05-01', 
+            'time_since' => '1 month ago', 
+            'no_recent_release' => false
+        ],
+        'popularity' => [
+            'downloads' => 1_000_000, 
+            'stars' => 1000, 
+            'forks' => 50
+        ],
+        'health' => [
+            'open_issues' => 5, 
+            'dependents' => 200, 
+            'suggesters' => 10
+        ],
     ];
 
     $insight = new PackageInsight($data);
@@ -77,12 +102,34 @@ it('converts the object to an array correctly', function () {
 
 it('gracefully handles non-numeric values in popularity or health fields', function () {
     $data = [
-        'package' => ['name' => 'pkg/example', 'license' => 'BSD'],
-        'version' => ['latest' => '1.0.1', 'used' => '1.0.1'],
-        'maintenance' => ['updated_at' => '3 days ago'],
-        'release' => ['latest_at' => '2025-06-01', 'time_since' => 'just now'],
-        'popularity' => ['downloads' => 'N/A', 'stars' => null, 'forks' => null],
-        'health' => ['open_issues' => false, 'dependents' => null, 'suggesters' => 0],
+        'package' => [
+            'name' => 'pkg/example', 
+            'license' => 'BSD'
+        ],
+        'version' => [
+            'latest' => '1.0.1', 
+            'used' => '1.0.1', 
+            'is_outdated' => false
+        ],
+        'maintenance' => [
+            'updated_at' => '3 days ago',
+            'is_stale' => false
+        ],
+        'release' => [
+            'latest_at' => '2025-06-01',
+            'time_since' => 'just now',
+            'no_recent_release' => false
+        ],
+        'popularity' => [
+            'downloads' => 'N/A',
+            'stars' => null,
+            'forks' => null
+        ],
+        'health' => [
+            'open_issues' => false, 
+            'dependents' => null, 
+            'suggesters' => 0
+        ],
     ];
 
     $insight = new PackageInsight($data);
@@ -97,12 +144,34 @@ it('gracefully handles non-numeric values in popularity or health fields', funct
 
 it('test headers', function(){
     $data = [
-        'package' => ['name' => 'pkg/example', 'license' => 'BSD'],
-        'version' => ['latest' => '1.0.1', 'used' => '1.0.1'],
-        'maintenance' => ['updated_at' => '3 days ago'],
-        'release' => ['latest_at' => '2025-06-01', 'time_since' => 'just now'],
-        'popularity' => ['downloads' => 'N/A', 'stars' => null, 'forks' => null],
-        'health' => ['open_issues' => false, 'dependents' => null, 'suggesters' => 0],
+        'package' => [
+            'name' => 'pkg/example', 
+            'license' => 'BSD'
+        ],
+        'version' => [
+            'latest' => '1.0.1', 
+            'used' => '1.0.1', 
+            'is_outdated' => false
+        ],
+        'maintenance' => [
+            'updated_at' => '3 days ago', 
+            'is_stale' => false
+        ],
+        'release' => [
+            'latest_at' => '2025-06-01', 
+            'time_since' => 'just now', 
+            'no_recent_release' => false
+        ],
+        'popularity' => [
+            'downloads' => 'N/A', 
+            'stars' => null, 
+            'forks' => null
+        ],
+        'health' => [
+            'open_issues' => false, 
+            'dependents' => null, 
+            'suggesters' => 0
+        ],
     ];
 
     $insight = new PackageInsight($data);

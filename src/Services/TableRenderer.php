@@ -10,17 +10,17 @@ class TableRenderer
 {
     public function render(array $insights, OutputInterface $output): void
     {
+        $output->writeln("\n");
+
         $table = new Table($output);
         
         $table->setHeaders($this->getTableHeaders());
-
+        
         $rows = $this->formatInsights($insights);
 
         $table->addRows($rows);
         
         $table->render();
-
-        $output->writeln("\n<info>✅ Done</info>");
     }
 
     public function getTableHeaders(): array
