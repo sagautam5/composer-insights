@@ -43,12 +43,12 @@ vendor\bin\composer-insights analyze --days=10
 You can install it in any Composer-based local PHP project as dev dependency:
 
 ```bash
-composer require composer-insights/composer-insights --dev
+composer require sagautam5/composer-insights --dev
 ```
 
 Make sure your project has both `composer.json` and `composer.lock` files.
 
-To avoid GitHub API rate limits and to enable access to private repos, set your GitHub token as an environment variable:
+To avoid GitHub API rate limits and to enable access to public repositories, set your GitHub token as an environment variable:
 
 ```bash
 export GITHUB_TOKEN=your_github_token
