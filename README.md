@@ -32,7 +32,7 @@ vendor\bin\composer-insights analyze --days=10
 
 ## 📋 Requirements
 
-- PHP 8.0 or higher
+- PHP 8.2 or higher
 - A Composer-based project
 - Internet connection
 
