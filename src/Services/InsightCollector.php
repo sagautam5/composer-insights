@@ -60,6 +60,8 @@ class InsightCollector
 
         $latestVersion = $this->packagistInsightResolver->fetchLatestVersion(...explode('/', $name));
 
+        $releaseData = $this->githubAnalyser->getReleaseData($repoUrl);
+
         return [
             'package' => [
                 'name' => $name,
@@ -70,7 +72,11 @@ class InsightCollector
                 'forks' => $info['forks_count'] ?? 'N/A',
                 'downloads' => $metadata['downloads']['total'] ?? 'N/A',
             ],
-            'release' => $this->githubAnalyser->getReleaseData($repoUrl),
+            'release' => [
+                'latest_at' => $releaseData['latest_at'] ?? 'N/A',
+                'time_since' => $releaseData['time_since'] ?? 'N/A',
+                'no_recent_release' => $releaseData['no_recent_release'] ?? 'N/A',
+            ],
             'maintenance' => [
                 'updated_at' => $updatedAt->diffForHumans(),
                 'is_stale' => $updatedAt->lt(Carbon::now()->subDays($this->days)),

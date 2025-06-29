@@ -27,7 +27,7 @@ class ReportSummaryGenerator
 
         $notUpdatedCount = $this->generateNotUpdatedPackageSummary($output, $insights);
 
-        $output->writeln("\n".Icon::get('package')." {$total} analyzed | {$outdatedCount} outdated | {$notUpdatedCount} without recent updatesp");
+        $output->writeln("\n".Icon::get('package')." {$total} analyzed | {$outdatedCount} outdated | {$notUpdatedCount} without recent updates");
 
         $output->writeln("\n<info>".Icon::get('done')." Done</info>");
     }
@@ -125,6 +125,9 @@ class ReportSummaryGenerator
 
     private function getVersiondifferenceSuffix(string $used, string $latest): string
     {
+        $used = $this->normalizeVersion($used);
+        $latest = $this->normalizeVersion($latest);
+
         [$cMajor, $cMinor, $cPatch] = array_map('intval', explode('.', ltrim($used, 'v')));
         [$lMajor, $lMinor, $lPatch] = array_map('intval', explode('.', ltrim($latest, 'v')));
 
@@ -132,15 +135,29 @@ class ReportSummaryGenerator
             $lMajor > $cMajor => 'major',
             $lMinor > $cMinor => 'minor',
             $lPatch > $cPatch => 'patch',
+            default => '',
         };
 
         $icon = match ($diff) {
             'major' => Icon::get('major'),
             'minor' => Icon::get('minor'),
             'patch' => Icon::get('patch'),
+            default => '',
         };
 
         return '('.$icon.' Behind by '.$diff.' version)';
+    }
+
+    private function normalizeVersion(string $version): string
+    {
+        $parts = explode('.', ltrim($version, 'v'));
+        $parts = array_map('intval', $parts);
+
+        return implode('.', [
+            $parts[0] ?? 0,
+            $parts[1] ?? 0,
+            $parts[2] ?? 0,
+        ]);
     }
 
     private function generateNotUpdatedPackageSummary(OutputInterface $output, array $insights): int
