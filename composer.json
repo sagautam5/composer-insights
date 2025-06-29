@@ -1,7 +1,7 @@
 {
     "name": "sagautam5/composer-insights",
     "description": "CLI tool to audit and analyze your composer dependencies.",
-    "type": "project",
+    "type": "library",
     "require": {
         "php": "^8.2",
         "symfony/console": "^6.0 || ^7.0",
