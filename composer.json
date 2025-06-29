@@ -2,11 +2,22 @@
     "name": "sagautam5/composer-insights",
     "description": "CLI tool to audit and analyze your composer dependencies.",
     "type": "library",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sagar Gautam",
+            "email": "sagautam5@gmail.com"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "symfony/console": "^6.0 || ^7.0",
         "guzzlehttp/guzzle": "^7.0",
         "nesbot/carbon": "^3.9"
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.8"
     },
     "autoload": {
         "psr-4": {
@@ -17,14 +28,10 @@
     "bin": [
         "bin/composer-insights"
     ],
-    "minimum-stability": "stable",
-    "license": "MIT",
-    "require-dev": {
-        "pestphp/pest": "^3.8"
-    },
+    
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
-    }
+    }    
 }
