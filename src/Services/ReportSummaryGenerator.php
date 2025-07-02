@@ -16,13 +16,9 @@ class ReportSummaryGenerator
 
         $total = count($insights);
 
-        $output->writeln(Icon::get('star')." Popular Packages:\n");
-        $output->writeln($this->getStatLine($insights, 'popularity.downloads', Icon::get('download').'  Most Downloaded Package', '', ' Downloads'));
-        $output->writeln($this->getStatLine($insights, 'popularity.stars', Icon::get('star').' Most Starred Package', '', ' Stars'));
-
-        $output->writeln("\n".Icon::get('health')." Health Checks:\n");
-        $output->writeln($this->getStatLine($insights, 'health.open_issues', Icon::get('bug').' Package with highest open issues', '', ' Issues').'  '. Icon::get('warning'));
-
+        $this->generatePopularitySummary($output, $insights);
+        $this->generateHealthSummary($output, $insights);
+        
         $outdatedCount = $this->generateOutdatedPackageSummary($output, $insights);
 
         $notUpdatedCount = $this->generateNotUpdatedPackageSummary($output, $insights);
@@ -30,6 +26,25 @@ class ReportSummaryGenerator
         $output->writeln("\n".Icon::get('package')." {$total} analyzed | {$outdatedCount} outdated | {$notUpdatedCount} without recent updates");
 
         $output->writeln("\n<info>".Icon::get('done')." Done</info>");
+    }
+
+    /**
+     * Generate a summary of popular packages
+     */
+    private function generatePopularitySummary(OutputInterface $output, array $insights)
+    {
+        $output->writeln(Icon::get('star')." Popular Packages:\n");
+        $output->writeln($this->getStatLine($insights, 'popularity.downloads', Icon::get('download').'  Most Downloaded Package', '', ' Downloads'));
+        $output->writeln($this->getStatLine($insights, 'popularity.stars', Icon::get('star').' Most Starred Package', '', ' Stars'));
+    }
+
+    /**
+     * Generate a summary of health checks
+     */
+    private function generateHealthSummary(OutputInterface $output, array $insights)
+    {
+        $output->writeln("\n".Icon::get('health')." Health Checks:\n");
+        $output->writeln($this->getStatLine($insights, 'health.open_issues', Icon::get('bug').' Package with highest open issues', '', ' Issues').'  '. Icon::get('warning'));
     }
 
     /**
