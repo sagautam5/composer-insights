@@ -17,7 +17,8 @@
         "nesbot/carbon": "^3.9"
     },
     "require-dev": {
-        "pestphp/pest": "^3.8"
+        "pestphp/pest": "^3.8",
+        "mockery/mockery": "^1.6"
     },
     "autoload": {
         "psr-4": {
