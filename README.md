@@ -101,6 +101,7 @@ Here are the available options for the `analyze` command:
 | `--export=FORMAT` | Export results to a file. Accepts `json` or `csv`.                        |
 | `--no-summary`    | Do not show summary statistics in the console output.                     |
 | `--no-table`      | Do not show the table view in the console output.                         |
+| `--no-cache`      | Fetch fresh dependency insights without using cached data.                |
 
 By default, all dependencies (both production and development) will be analyzed.
 

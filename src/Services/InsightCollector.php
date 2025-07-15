@@ -12,11 +12,23 @@ class InsightCollector
 
     protected int $days;
 
-    public function __construct(int $days = 180)
+    private bool $useCache;
+
+    private CacheManager $cacheManager;
+
+    public function __construct(int $days = 180, bool $useCache = true)
     {
-        $this->githubAnalyser = new GitHubAnalyzer(getenv('GITHUB_TOKEN') ?? null, $days);
-        $this->packagistInsightResolver = new PackagistInsightResolver();
         $this->days = $days;
+        $this->useCache = $useCache;
+
+        $this->setUp();
+    }
+
+    private function setUp()
+    {
+        $this->githubAnalyser = new GitHubAnalyzer(getenv('GITHUB_TOKEN') ?? null, $this->days);
+        $this->packagistInsightResolver = new PackagistInsightResolver();
+        $this->cacheManager = new CacheManager();
     }
     public function collect(OutputInterface $output, array $packages, array $explicitRequires): array
     {
@@ -38,6 +50,11 @@ class InsightCollector
         
         if (!in_array($name, $explicitRequires, true)) {
             return null;
+        }
+
+        if ($this->useCache && $cached = $this->cacheManager->loadFromCache($name)) {
+            $output->writeln("[CACHE] {$name}");
+            return $cached;
         }
 
         $repoUrl = $package['source']['url'] ?? '';
@@ -62,7 +79,7 @@ class InsightCollector
 
         $releaseData = $this->githubAnalyser->getReleaseData($repoUrl);
 
-        return [
+        $result = [
             'package' => [
                 'name' => $name,
                 'license' => $license
@@ -92,6 +109,10 @@ class InsightCollector
                 'is_outdated' => $latestVersion == $package['version'] ? false : true
             ]
         ];
+
+        $this->cacheManager->saveToCache($name, $result);
+
+        return $result;
     }
 
     private function getLicenseInfoFromMetaData(array $metadata)

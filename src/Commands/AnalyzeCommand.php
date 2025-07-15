@@ -44,7 +44,7 @@ class AnalyzeCommand extends Command
         
         [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($inputOptions['dev'], $inputOptions['prod']);
         
-        $insights = (new InsightCollector($inputOptions['days']))->collect($output, $packages, $explicitRequires);
+        $insights = (new InsightCollector($inputOptions['days'], !$inputOptions['no-cache']))->collect($output, $packages, $explicitRequires);
 
         if($inputOptions['export']) {
             (new ExportResolver())->resolve($inputOptions['export'])->export($insights, $output);
