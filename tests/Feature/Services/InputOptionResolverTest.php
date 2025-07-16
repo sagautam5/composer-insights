@@ -2,11 +2,10 @@
 
 use ComposerInsights\Services\InputOptionResolver;
 use Symfony\Component\Console\Input\InputInterface;
-use Mockery;
 
 test('it correctly resolves all input options from InputInterface', function () {
 
-    $input = Mockery::mock(InputInterface::class);
+    $input = \Mockery::mock(InputInterface::class);
 
     $input->shouldReceive('getOption')->with('days')->andReturn(30);
     $input->shouldReceive('getOption')->with('dev')->andReturn(true);

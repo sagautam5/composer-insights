@@ -11,8 +11,6 @@ class CacheManager
     public function __construct()
     {
         $this->cacheDir = DirectoryResolver::resolve('cache');
-
-        DirectoryResolver::createDirectoryIfNotExists($this->cacheDir);
     }
 
     public function loadFromCache(string $name): ?array
