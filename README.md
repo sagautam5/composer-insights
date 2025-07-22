@@ -29,17 +29,25 @@ vendor\bin\composer-insights analyze
 ```
 ![Sample Console Output](./images/SampleOutput.png)
 ---
+### Exports
+
+##### JSON
 ```bash
 vendor\bin\composer-insights analyze --export=json
 ```
+JSON file will be exported to `.composer-insights/output/data.json` by default
+
 [Sample JSON Output](./exports/data.json)
 
+##### CSV
 ---
 ```bash
 vendor\bin\composer-insights analyze --export=csv
 ```
+CSV file will be exported to `.composer-insights/output/data.csv` by default
 
 [Sample CSV Output](./exports/data.csv)
+
 
 ---
 ## 📋 Requirements
@@ -114,6 +122,7 @@ By default, all dependencies (both production and development) will be analyzed.
 - Fetches GitHub and Packagist stats
 - Displays a clean, color-coded CLI table
 - Displays a clean, color-coded summary
+- Caches the insights collected for each package in json
 
 ## 🪪 License
 
