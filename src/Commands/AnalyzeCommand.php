@@ -31,8 +31,6 @@ class AnalyzeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>'.Icon::get('search').' Fetching Composer Dependency Insights</info>');
-
         $dependencyLoader = new ComposerDependencyLoader();
 
         if (!$dependencyLoader->hasComposerFiles()) {
@@ -42,12 +40,19 @@ class AnalyzeCommand extends Command
 
         $inputOptions = (new InputOptionResolver())->resolve($input);
         
+        if($inputOptions['export'] && !in_array($inputOptions['export'], ['json', 'csv'])) {
+            $output->writeln('<error>Export format not supported. Supported formats: json, csv</error>');
+            return Command::FAILURE;
+        }
+
+        $output->writeln('<info>'.Icon::get('search').' Fetching Composer Dependency Insights</info>');
+
         [$explicitRequires, $packages] = $dependencyLoader->loadComposerData($inputOptions['dev'], $inputOptions['prod']);
         
         $insights = (new InsightCollector($inputOptions['days'], !$inputOptions['no-cache']))->collect($output, $packages, $explicitRequires);
 
         if($inputOptions['export']) {
-            (new ExportResolver())->resolve($inputOptions['export'])->export($insights, $output);
+            (new ExportResolver())->resolve($inputOptions['export'], $inputOptions['export-path'])->export($insights, $output);
         }else{
             if(!$inputOptions['no-table']) {
                 (new TableRenderer())->render($insights, $output);

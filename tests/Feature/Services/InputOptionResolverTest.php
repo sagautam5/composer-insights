@@ -14,6 +14,7 @@ test('it correctly resolves all input options from InputInterface', function () 
     $input->shouldReceive('getOption')->with('no-table')->andReturn(false);
     $input->shouldReceive('getOption')->with('export')->andReturn('json');
     $input->shouldReceive('getOption')->with('no-cache')->andReturn(true);
+    $input->shouldReceive('getOption')->with('export-path')->andReturn(null);
 
     $resolver = new InputOptionResolver();
 
@@ -27,6 +28,7 @@ test('it correctly resolves all input options from InputInterface', function () 
         'no-table' => false,
         'export' => 'json',
         'no-cache' => true,
+        'export-path' => null
     ]);
 });
 

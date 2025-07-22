@@ -15,6 +15,7 @@ class ConfigureAnalyzeCommand
             ->addOption('export', mode: InputOption::VALUE_REQUIRED, description: 'Output results as JSON', suggestedValues: ['json', 'csv'])
             ->addOption('no-summary', null, InputOption::VALUE_NONE, 'Do not show summary')
             ->addOption('no-table', null, InputOption::VALUE_NONE, 'Do not show table')
-            ->addOption('no-cache', null, InputOption::VALUE_NONE, 'Do not use cache');
+            ->addOption('no-cache', null, InputOption::VALUE_NONE, 'Do not use cache')
+            ->addOption('export-path', mode: InputOption::VALUE_OPTIONAL, description: 'Path to export results');
     }
 }
